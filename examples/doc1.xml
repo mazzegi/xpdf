@@ -1,0 +1,197 @@
+<document>
+
+    <meta>
+        <author>mazzegi</author>
+        <creator>MPDF</creator>
+        <subject>Sample 1</subject>
+    </meta>
+    <page>
+        <orientation>portrait</orientation>
+        <format>a4</format>
+        <margins>
+            <left>30</left>
+            <top>20</top>
+            <right>15</right>
+            <bottom>20</bottom>
+        </margins>
+    </page>
+
+    <style>
+default-font{
+    font-family: arial;
+    font-point-size: 12;
+    font-style: normal;	
+}
+
+default-font-times{
+    font-family: arial;
+    font-point-size: 12;
+    font-style: normal;	
+}
+
+default-font-small{
+    font-family: arial;
+    font-point-size: 8;
+    font-style: normal;	
+}
+
+font-times-big-italic-bold{
+    font-family: arial;
+    font-point-size: 16;
+    font-style: italic;	
+    font-weight: bold;
+}
+
+percent-bar {
+    font-family: arial;
+    font-point-size: 8;    
+    font-weight: bold;
+    h-align: left;
+    line-width: 0.2; 
+    color: #888888; 
+    background-color: #dddddd; 
+    border: 1,1,1,1;
+}
+
+    </style>
+
+    <header>
+        <sety y="5"/>
+        <text>
+        A header • et {cp} / {np}
+        </text>
+        <sety y="20"/>
+    </header>
+
+    <footer>
+    </footer>
+
+    <body>
+        <font class="default-font"/>
+
+        <table style="border: 1,1,1,1; padding: 2,2,2,2;">
+            <tr>
+                <td style="column-width:80; h-align: left;">
+             ö ü ä Ö Ü Ä ß sed diam voluptua.
+                </td>
+                <td style="column-width:80; h-align: right;">
+            Some right\
+            aligned\
+            text\
+            ...
+                </td>
+            </tr>
+        </table>
+
+        <table style="border: 1,1,1,1; padding: 2,2,2,2;">
+            <tr style="background-color: #DDDDFF; font-weight: bold;">
+                <td style="column-width: 60;">
+            Lorem ipsum dolor sit amet, *consetetur* sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat
+                </td>
+                <td style="column-width: 40;">sed diam</td>
+                <td style="column-width: 60;">Duis autem vel eum iriure dolor in hendrerit</td>
+            </tr>
+            <tr style="font-family: times;">
+                <td style="column-width: 60;">
+                    Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat\
+                    nulla facilisis at vero eros et __accumsan__ et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore            
+                </td>
+                <td style="column-span: 2;">sed diam</td>
+            </tr>
+            <tr>
+                <td style="column-width: 60; text-color: #880000;">
+                    Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat            
+                </td>
+                <td style="column-width: 40;">
+                    <image>bug.png</image>
+                    <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
+                    <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
+                45,67 %
+                    </box>
+                </td>
+                <td class="font-times-big-italic-bold">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit,\
+                    sed diam        
+                </td>
+            </tr>
+            <tr>
+                <td style="column-width: 40; column-span: 2;">
+                    <image>bug.png</image>
+                    <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
+                    <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
+                45,67 %
+                    </box>
+                </td>
+                <td>sed diam 9400</td>
+            </tr>
+        </table>
+
+        <image>bug.png</image>
+        <lf lines="3.0"/>
+
+        <box style="line-height: 1.5; width: 69; h-align: center; padding: 3,3,3,3; line-width: 0.3; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+            Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
+            Claustro etiam numbat decesse.
+        </box>
+
+        <text>Sic!</text>
+
+        <lf lines="2.0"/>
+
+        <!-- <text>Cis!</text> -->
+
+        <box style="offset-x: 10; line-height: 1.5; width: 60; h-align: right; padding: 5,5,5,5; line-width: 0.3; color: #0000FF; background-color: #aaFFaa; border: 1,1,1,1;">
+            Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
+            Duis autem vel eum iriure dolor\
+            in hendrerit in vulputate\
+            velit esse molestie\
+            consequat, vel illum dolore eu feugiat            
+        </box>
+
+        <lf lines="2.0"/>
+
+        <box style="offset-x: 10; line-height: 1.5; width: 90; h-align: center; padding: 5,5,5,5; line-width: 0.3; text-color: #eeeeee; color: #0000FF; background-color: #5555aa; border: 1,1,1,1;">
+            Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
+            Duis autem vel eum iriure dolor\
+            in hendrerit in vulputate\
+            velit esse molestie\
+            consequat, vel illum dolore eu feugiat            
+        </box>
+
+        <text>Sic!</text>
+        <lf lines="2.0"/>
+
+        <table style="border: 1,1,1,1; padding: 2,2,2,2;">
+            <tr>
+                <td>__1__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__2__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__3__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__4__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__5__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__6__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__7__: c4 e4; kf3 c6</td>
+                <td style="h-align: right;">magna ubi aliquam</td>
+            </tr>
+        </table>
+
+    </body>
+
+</document>
