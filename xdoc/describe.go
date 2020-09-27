@@ -1,8 +1,11 @@
 package xdoc
 
 import (
-	"fmt"
+	"encoding/json"
+	"encoding/xml"
 	"strings"
+
+	"github.com/mazzegi/xpdf/style"
 )
 
 func clearStr(s string) string {
@@ -12,78 +15,76 @@ func clearStr(s string) string {
 }
 
 type DescribeItem struct {
-	Name  string
-	Value interface{}
-	Items []DescribeItem
-}
-
-func (i DescribeItem) Dump(ident string) string {
-	var vs string
-	if i.Value != nil {
-		vs = fmt.Sprintf("%v", i.Value)
-	} else {
-		vs = "-"
-	}
-	s := fmt.Sprintf("%s[%q:%v]", ident, i.Name, vs)
-	sl := []string{}
-	for _, sub := range i.Items {
-		sl = append(sl, sub.Dump(ident+"  "))
-	}
-	if len(sl) > 0 {
-		s += "\n" + strings.Join(sl, "\n")
-	}
-	return s
+	Name       string
+	Value      interface{}
+	StyleDiffs []Diff
+	Items      []DescribeItem
 }
 
 type Description struct {
 	Items []DescribeItem
+	doc   *Document
 }
 
-func (d *Description) Dump() string {
-	sl := []string{}
-	for _, sub := range d.Items {
-		sl = append(sl, sub.Dump(""))
+type DescribeFormat string
+
+const (
+	DescribeXML  DescribeFormat = "xml"
+	DescribeJSON DescribeFormat = "json"
+)
+
+func (d *Description) Dump(format DescribeFormat) string {
+	var bs []byte
+	switch format {
+	case DescribeXML:
+		bs, _ = xml.MarshalIndent(d, "", "  ")
+	case DescribeJSON:
+		bs, _ = json.MarshalIndent(d, "", "  ")
+	default:
+		bs, _ = json.MarshalIndent(d, "", "  ")
 	}
-	return strings.Join(sl, "\n")
+	return string(bs)
 }
 
 func Describe(doc *Document) *Description {
-	desc := &Description{}
+	desc := &Description{
+		doc: doc,
+	}
 
 	metaItem := DescribeItem{
 		Name: "meta",
 	}
-	metaItem.Items = append(metaItem.Items, describeMeta(doc.Meta)...)
+	metaItem.Items = append(metaItem.Items, desc.describeMeta(doc.Meta)...)
 	desc.Items = append(desc.Items, metaItem)
 
 	pageItem := DescribeItem{
 		Name: "page",
 	}
-	pageItem.Items = append(pageItem.Items, describePage(doc.Page)...)
+	pageItem.Items = append(pageItem.Items, desc.describePage(doc.Page)...)
 	desc.Items = append(desc.Items, pageItem)
 
 	headerItem := DescribeItem{
 		Name: "header",
 	}
-	headerItem.Items = append(headerItem.Items, describeInstructions(doc.Header)...)
+	headerItem.Items = append(headerItem.Items, desc.describeInstructions(doc.Header)...)
 	desc.Items = append(desc.Items, headerItem)
 
 	footerItem := DescribeItem{
 		Name: "footer",
 	}
-	footerItem.Items = append(footerItem.Items, describeInstructions(doc.Footer)...)
+	footerItem.Items = append(footerItem.Items, desc.describeInstructions(doc.Footer)...)
 	desc.Items = append(desc.Items, footerItem)
 
 	bodyItem := DescribeItem{
 		Name: "body",
 	}
-	bodyItem.Items = append(bodyItem.Items, describeInstructions(doc.Body)...)
+	bodyItem.Items = append(bodyItem.Items, desc.describeInstructions(doc.Body)...)
 	desc.Items = append(desc.Items, bodyItem)
 
 	return desc
 }
 
-func describeMeta(meta Meta) []DescribeItem {
+func (desc *Description) describeMeta(meta Meta) []DescribeItem {
 	return []DescribeItem{
 		{
 			Name:  "author",
@@ -100,7 +101,7 @@ func describeMeta(meta Meta) []DescribeItem {
 	}
 }
 
-func describePage(page Page) []DescribeItem {
+func (desc *Description) describePage(page Page) []DescribeItem {
 	return []DescribeItem{
 		{
 			Name:  "orientation",
@@ -112,12 +113,12 @@ func describePage(page Page) []DescribeItem {
 		},
 		{
 			Name:  "margins",
-			Items: describeMargins(page.Margins),
+			Items: desc.describeMargins(page.Margins),
 		},
 	}
 }
 
-func describeMargins(margins Margins) []DescribeItem {
+func (desc *Description) describeMargins(margins Margins) []DescribeItem {
 	return []DescribeItem{
 		{
 			Name:  "left",
@@ -138,80 +139,105 @@ func describeMargins(margins Margins) []DescribeItem {
 	}
 }
 
-func describeTable(t *Table) []DescribeItem {
+func (desc *Description) describeTable(t *Table) []DescribeItem {
 	i := DescribeItem{
-		Name: "table",
+		Name:       "table",
+		StyleDiffs: desc.describeMutator(t),
 	}
 	for _, tr := range t.Rows {
-		i.Items = append(i.Items, describeTableRow(tr)...)
+		i.Items = append(i.Items, desc.describeTableRow(tr)...)
 	}
 	return []DescribeItem{i}
 }
 
-func describeTableRow(tr *TableRow) []DescribeItem {
+func (desc *Description) describeTableRow(tr *TableRow) []DescribeItem {
 	i := DescribeItem{
-		Name: "table-row",
+		Name:       "table-row",
+		StyleDiffs: desc.describeMutator(tr),
 	}
 	for _, td := range tr.Cells {
-		i.Items = append(i.Items, describeTableCell(td)...)
+		i.Items = append(i.Items, desc.describeTableCell(td)...)
 	}
 	return []DescribeItem{i}
 }
 
-func describeTableCell(td *TableCell) []DescribeItem {
+func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 	i := DescribeItem{
-		Name:  "table-cell",
-		Value: clearStr(td.Content),
+		Name:       "table-cell",
+		StyleDiffs: desc.describeMutator(td),
+		Value:      clearStr(td.Content),
 	}
 	if len(td.Instructions) > 0 {
-		i.Items = append(i.Items, describeInstructions(Instructions{
+		i.Items = append(i.Items, desc.describeInstructions(Instructions{
 			iss: td.Instructions,
 		})...)
 	}
 	return []DescribeItem{i}
 }
 
-func describeInstructions(iss Instructions) []DescribeItem {
+func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 	dis := []DescribeItem{}
 	for _, is := range iss.iss {
 		switch is := is.(type) {
 		case *Font:
 			dis = append(dis, DescribeItem{
-				Name: "font",
+				Name:       "font",
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *LineFeed:
 			dis = append(dis, DescribeItem{
-				Name:  "line-feed",
-				Value: is.Lines,
+				Name:       "line-feed",
+				Value:      is.Lines,
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *SetX:
 			dis = append(dis, DescribeItem{
-				Name:  "setx",
-				Value: is.X,
+				Name:       "setx",
+				Value:      is.X,
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *SetY:
 			dis = append(dis, DescribeItem{
-				Name:  "sety",
-				Value: is.Y,
+				Name:       "sety",
+				Value:      is.Y,
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *Box:
 			dis = append(dis, DescribeItem{
-				Name:  "box",
-				Value: clearStr(is.Text),
+				Name:       "box",
+				Value:      clearStr(is.Text),
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *Text:
 			dis = append(dis, DescribeItem{
-				Name:  "text",
-				Value: clearStr(is.Text),
+				Name:       "text",
+				Value:      clearStr(is.Text),
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *Image:
 			dis = append(dis, DescribeItem{
-				Name:  "image",
-				Value: is.Source,
+				Name:       "image",
+				Value:      is.Source,
+				StyleDiffs: desc.describeMutator(is),
 			})
 		case *Table:
-			dis = append(dis, describeTable(is)...)
+			dis = append(dis, desc.describeTable(is)...)
 		}
 	}
 	return dis
+}
+
+func (desc *Description) describeMutator(ins Instruction) []Diff {
+	sty := style.Styles{}
+	mutsty := ins.MutatedStyles(desc.doc.styleClasses, sty)
+	diffs, err := stylesDiff(sty, mutsty)
+	if err != nil {
+		return []Diff{
+			{
+				Path: "ERROR",
+				Mod:  err.Error(),
+			},
+		}
+	}
+	return diffs
 }

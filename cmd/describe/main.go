@@ -29,5 +29,5 @@ func main() {
 		os.Exit(2)
 	}
 	desc := xdoc.Describe(doc)
-	fmt.Printf("%s\n", desc.Dump())
+	fmt.Printf("%s\n", desc.Dump(xdoc.DescribeXML))
 }
