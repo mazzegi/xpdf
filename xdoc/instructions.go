@@ -15,7 +15,7 @@ type Instruction interface {
 
 type Instructions struct {
 	Styled
-	iss []Instruction
+	ISS []Instruction
 }
 
 func (is *Instructions) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -38,7 +38,7 @@ func (is *Instructions) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 			if err != nil {
 				return errors.Wrapf(err, "decode token %v", token)
 			}
-			is.iss = append(is.iss, i)
+			is.ISS = append(is.ISS, i)
 		}
 	}
 }

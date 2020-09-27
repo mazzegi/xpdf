@@ -169,7 +169,7 @@ func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 	}
 	if len(td.Instructions) > 0 {
 		i.Items = append(i.Items, desc.describeInstructions(Instructions{
-			iss: td.Instructions,
+			ISS: td.Instructions,
 		})...)
 	}
 	return []DescribeItem{i}
@@ -177,7 +177,7 @@ func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 
 func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 	dis := []DescribeItem{}
-	for _, is := range iss.iss {
+	for _, is := range iss.ISS {
 		switch is := is.(type) {
 		case *Font:
 			dis = append(dis, DescribeItem{
