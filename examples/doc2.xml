@@ -69,11 +69,6 @@ percent-bar {
     <body>
         <font class="default-font"/>
 
-        <text>
-            Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat\
-            nulla facilisis at vero eros et __accumsan__ et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore            
-        </text>
-
         <table style="border: 1,1,1,1; padding: 2,2,2,2;">
             <tr>
                 <td style="column-width:80; h-align: left;">
@@ -108,6 +103,7 @@ percent-bar {
                     Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat            
                 </td>
                 <td style="column-width: 40;">
+                    <image>bug.png</image>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
                 45,67 %
@@ -120,6 +116,7 @@ percent-bar {
             </tr>
             <tr>
                 <td style="column-width: 40; column-span: 2;">
+                    <image>bug.png</image>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
                 45,67 %
@@ -129,6 +126,7 @@ percent-bar {
             </tr>
         </table>
 
+        <image>bug.png</image>
         <lf lines="3.0"/>
 
         <box style="line-height: 1.5; width: 69; h-align: center; padding: 3,3,3,3; line-width: 0.3; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
