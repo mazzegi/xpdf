@@ -62,6 +62,30 @@ func (i TextItem) String() string {
 	return fmt.Sprintf("text: %q (%s)", i.Text, strings.Join(sl, ", "))
 }
 
+func (i TextItem) Words() Items {
+	is := Items{}
+	words := []string{}
+	currWord := ""
+	for _, r := range i.Text {
+		if r == ' ' {
+			words = append(words, currWord)
+			currWord = ""
+		} else {
+			currWord += string(r)
+		}
+	}
+	if currWord != "" {
+		words = append(words, currWord)
+	}
+	for _, word := range words {
+		is = append(is, TextItem{
+			Text:  word,
+			Style: i.Style,
+		})
+	}
+	return is
+}
+
 type ControlItem struct {
 	Op ControlOp
 }
@@ -71,6 +95,19 @@ func (i ControlItem) String() string {
 }
 
 type Items []Item
+
+func (is Items) Words() Items {
+	wis := Items{}
+	for _, i := range is {
+		switch i := i.(type) {
+		case TextItem:
+			wis = append(wis, i.Words()...)
+		default:
+			wis = append(wis, i)
+		}
+	}
+	return wis
+}
 
 func Parse(s string) Items {
 	items := Items{}

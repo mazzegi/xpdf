@@ -78,7 +78,7 @@ func (e *FPDF) Error() error {
 	return e.pdf.Error()
 }
 
-func (e *FPDF) Write(w io.Writer) error {
+func (e *FPDF) WritePDF(w io.Writer) error {
 	return e.pdf.Output(w)
 }
 
@@ -110,6 +110,10 @@ func (e *FPDF) SetY(y float64) {
 	e.pdf.SetY(y)
 }
 
+func (e *FPDF) GetXY() (float64, float64) {
+	return e.pdf.GetXY()
+}
+
 func (e *FPDF) LineFeed(lines float64) {
 	_, heightMM := e.pdf.GetFontSize()
 	e.pdf.Ln(heightMM * lines)
@@ -117,4 +121,36 @@ func (e *FPDF) LineFeed(lines float64) {
 
 func (e *FPDF) ChangeFont(fnt style.Font) {
 	e.pdf.SetFont(string(fnt.Family), fpdfFontStyle(fnt), float64(fnt.PointSize))
+}
+
+func (e *FPDF) EffectiveWidth(width float64) float64 {
+	l, _, r, _ := e.pdf.GetMargins()
+	pw, _ := e.pdf.GetPageSize()
+	ew := pw - (l + r) - 3 // without subtracting 3 it doesn't fit
+	if width < 0 || width > ew {
+		return ew
+	}
+	return width
+}
+
+func (e *FPDF) PutImage(src string, x, y, width, height float64) {
+	e.pdf.ImageOptions(src, x, y, width, height, false, gofpdf.ImageOptions{}, 0, "")
+}
+
+func (e *FPDF) SetTextColor(r, g, b int) {
+	e.pdf.SetTextColor(r, g, b)
+}
+
+func (e *FPDF) FontHeight() float64 {
+	_, heightMM := e.pdf.GetFontSize()
+	return heightMM
+}
+
+func (e *FPDF) TextWidth(s string) float64 {
+	return e.pdf.GetStringWidth(s)
+}
+
+func (e *FPDF) WriteText(s string) {
+	x, y := e.pdf.GetXY()
+	e.pdf.Text(x, y, s)
 }

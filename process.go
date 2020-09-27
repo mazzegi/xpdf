@@ -45,7 +45,7 @@ func (p *Processor) Process(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	return p.engine.Write(w)
+	return p.engine.WritePDF(w)
 }
 
 func (p *Processor) tr(s string) string {
@@ -55,6 +55,11 @@ func (p *Processor) tr(s string) string {
 func (p *Processor) changeFont(fnt style.Font) {
 	p.currStyles.Font = fnt
 	p.engine.ChangeFont(p.currStyles.Font)
+}
+
+func (p *Processor) resetStyles() {
+	p.engine.ChangeFont(p.currStyles.Font)
+	p.engine.SetTextColor(p.currStyles.Text.R, p.currStyles.Text.G, p.currStyles.Text.B)
 }
 
 func (p *Processor) processInstructions(is xdoc.Instructions) {
@@ -69,13 +74,41 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 		case *xdoc.SetY:
 			p.engine.SetY(i.Y)
 		case *xdoc.Box:
-			//p.renderTextBox(i.Text, p.appliedStyles(i))
+			p.renderTextBox(i)
 		case *xdoc.Text:
-			//p.renderText(i, p.appliedStyles(i))
+			p.renderText(i)
 		case *xdoc.Table:
-			//p.renderTable(i, p.appliedStyles(i))
+			p.renderTable(i)
 		case *xdoc.Image:
-			//p.renderImage(i, p.appliedStyles(i))
+			p.renderImage(i)
 		}
 	}
+}
+
+func (p *Processor) renderText(text *xdoc.Text) {
+	defer p.resetStyles()
+	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
+
+	width := p.engine.EffectiveWidth(sty.Dimension.Width)
+	p.writeText(text.Text, width, sty)
+}
+
+func (p *Processor) renderTextBox(box *xdoc.Box) {
+	defer p.resetStyles()
+	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
+	_ = sty
+}
+
+func (p *Processor) renderTable(table *xdoc.Table) {
+	defer p.resetStyles()
+	sty := table.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
+	_ = sty
+}
+
+func (p *Processor) renderImage(img *xdoc.Image) {
+	sty := img.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
+	x, y := p.engine.GetXY()
+	x += sty.Dimension.OffsetX
+	y += sty.Dimension.OffsetY
+	p.engine.PutImage(img.Source, x, y, sty.Dimension.Width, sty.Dimension.Height)
 }

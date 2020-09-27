@@ -9,14 +9,14 @@ import (
 )
 
 type RGB struct {
-	R, G, B uint8
+	R, G, B int
 }
 
 func (c RGB) String() string {
 	return fmt.Sprintf("RGB(%d,%d,%d)", c.R, c.G, c.B)
 }
 
-func makeRGB(r, g, b uint8) RGB {
+func makeRGB(r, g, b int) RGB {
 	return RGB{
 		R: r,
 		G: g,
@@ -38,9 +38,9 @@ func (c *RGB) UnmarshalStyle(s string) error {
 	if err != nil {
 		return errors.Wrapf(err, "parse color hex string (%s)", s)
 	}
-	c.R = uint8(n >> 16)
-	c.G = uint8(n >> 8)
-	c.B = uint8(n)
+	c.R = int(uint(n >> 16))
+	c.G = int(uint8(n >> 8))
+	c.B = int(uint8(n))
 	return nil
 }
 

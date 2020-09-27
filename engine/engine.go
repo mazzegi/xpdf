@@ -8,7 +8,7 @@ import (
 
 type Engine interface {
 	Error() error
-	Write(io.Writer) error
+	WritePDF(io.Writer) error
 	SetPageCountAlias(alias string)
 	CurrentPage() int
 	OnHeader(func())
@@ -16,6 +16,13 @@ type Engine interface {
 	AddPage()
 	SetX(x float64)
 	SetY(y float64)
+	GetXY() (float64, float64)
 	LineFeed(lines float64)
 	ChangeFont(fnt style.Font)
+	EffectiveWidth(width float64) float64
+	PutImage(src string, x, y, width, height float64)
+	SetTextColor(r, g, b int)
+	FontHeight() float64
+	TextWidth(s string) float64
+	WriteText(s string)
 }
