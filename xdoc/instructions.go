@@ -66,13 +66,6 @@ type SetY struct {
 	Y       float64  `xml:"y,attr"`
 }
 
-type SetXY struct {
-	NoStyles
-	XMLName xml.Name `xml:"setxy"`
-	X       float64  `xml:"x,attr"`
-	Y       float64  `xml:"y,attr"`
-}
-
 type Box struct {
 	Styled
 	XMLName xml.Name `xml:"box"`

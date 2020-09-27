@@ -18,7 +18,6 @@ func init() {
 	instructionRegistry.Register(&LineFeed{})
 	instructionRegistry.Register(&SetX{})
 	instructionRegistry.Register(&SetY{})
-	instructionRegistry.Register(&SetXY{})
 	instructionRegistry.Register(&Image{})
 	instructionRegistry.Register(&Table{})
 	instructionRegistry.Register(&TableRow{})
