@@ -151,6 +151,8 @@ func (e *FPDF) TextWidth(s string) float64 {
 }
 
 func (e *FPDF) WriteText(s string) {
-	x, y := e.pdf.GetXY()
-	e.pdf.Text(x, y, s)
+	// x, y := e.pdf.GetXY()
+	// e.pdf.Text(x, y, s)
+	_, heightMM := e.pdf.GetFontSize()
+	e.pdf.Write(heightMM, s)
 }

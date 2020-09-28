@@ -46,7 +46,7 @@ func TestParse(t *testing.T) {
 			items: []Item{
 				&TextItem{Text: "lorem ", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
 				&TextItem{Text: "ipsum ", Style: TextStyle{Italic: false, Bold: true, Mono: false}},
-				&TextItem{Text: " dolor", Style: TextStyle{Italic: true, Bold: true, Mono: false}},
+				&TextItem{Text: "dolor", Style: TextStyle{Italic: true, Bold: true, Mono: false}},
 			},
 		},
 		{
@@ -63,7 +63,7 @@ func TestParse(t *testing.T) {
 			in:   "lorem ipsum `sed` dolor",
 			items: []Item{
 				&TextItem{Text: "lorem ipsum ", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
-				&TextItem{Text: " sed ", Style: TextStyle{Italic: false, Bold: false, Mono: true}},
+				&TextItem{Text: "sed", Style: TextStyle{Italic: false, Bold: false, Mono: true}},
 				&TextItem{Text: " dolor", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
 			},
 		},
@@ -99,14 +99,14 @@ func ensureItemsEqual(itemsHave []Item, itemsWant []Item) error {
 			return errors.Errorf("items at %d have different types (have: %T, want: %T)", i, haveItem, wantItem)
 		}
 		switch wantTypedItem := wantItem.(type) {
-		case ControlItem:
-			haveTypedItem := haveItem.(ControlItem)
-			if haveTypedItem != wantTypedItem {
+		case *ControlItem:
+			haveTypedItem := haveItem.(*ControlItem)
+			if *haveTypedItem != *wantTypedItem {
 				return errors.Errorf("items at %d are not equal", i)
 			}
-		case TextItem:
-			haveTypedItem := haveItem.(TextItem)
-			if haveTypedItem != wantTypedItem {
+		case *TextItem:
+			haveTypedItem := haveItem.(*TextItem)
+			if *haveTypedItem != *wantTypedItem {
 				return errors.Errorf("items at %d are not equal", i)
 			}
 		}
@@ -120,4 +120,45 @@ func dumpItems(items []Item) string {
 		sl = append(sl, fmt.Sprintf("[%s]", i.String()))
 	}
 	return strings.Join(sl, ", ")
+}
+
+func TestWords(t *testing.T) {
+	tests := []struct {
+		in    string
+		words []Item
+	}{
+		{
+			in: "Duis autem vel eum iriure",
+			words: []Item{
+				&TextItem{Text: "Duis", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "autem", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "vel", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "eum", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "iriure", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+			},
+		},
+		{
+			in: "Duis autem __vel__ eum iriure\\sed october esse ",
+			words: []Item{
+				&TextItem{Text: "Duis", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "autem", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "vel", Style: TextStyle{Italic: false, Bold: true, Mono: false}},
+				&TextItem{Text: "eum", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "iriure", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&ControlItem{Op: LineFeed},
+				&TextItem{Text: "sed", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "october", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+				&TextItem{Text: "esse", Style: TextStyle{Italic: false, Bold: false, Mono: false}},
+			},
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(fmt.Sprintf("test-words-#%d", i), func(t *testing.T) {
+			items := Parse(test.in).Words()
+			if err := ensureItemsEqual(items, test.words); err != nil {
+				t.Fatalf("%v\nhave: %s\nwant: %s", err, dumpItems(items), dumpItems(test.words))
+			}
+		})
+	}
 }

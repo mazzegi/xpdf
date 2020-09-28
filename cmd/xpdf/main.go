@@ -14,8 +14,9 @@ import (
 func main() {
 	var in string
 	if len(os.Args) < 2 {
-		fmt.Println("usage: xpdf <in> <optional:out>")
-		os.Exit(1)
+		// fmt.Println("usage: xpdf <in> <optional:out>")
+		// os.Exit(1)
+		in = "../../examples/doc1.xml"
 	} else {
 		in = os.Args[1]
 	}

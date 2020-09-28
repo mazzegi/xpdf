@@ -68,7 +68,9 @@ func (i TextItem) Words() Items {
 	currWord := ""
 	for _, r := range i.Text {
 		if r == ' ' {
-			words = append(words, currWord)
+			if currWord != "" {
+				words = append(words, currWord)
+			}
 			currWord = ""
 		} else {
 			currWord += string(r)
@@ -78,7 +80,7 @@ func (i TextItem) Words() Items {
 		words = append(words, currWord)
 	}
 	for _, word := range words {
-		is = append(is, TextItem{
+		is = append(is, &TextItem{
 			Text:  word,
 			Style: i.Style,
 		})
@@ -100,7 +102,7 @@ func (is Items) Words() Items {
 	wis := Items{}
 	for _, i := range is {
 		switch i := i.(type) {
-		case TextItem:
+		case *TextItem:
 			wis = append(wis, i.Words()...)
 		default:
 			wis = append(wis, i)

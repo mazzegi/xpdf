@@ -21,7 +21,7 @@ func (p *Processor) setMarkupFont(textStyles markup.TextStyle, baseFont style.Fo
 }
 
 type textLine struct {
-	items []markup.TextItem
+	items []*markup.TextItem
 	width float64
 }
 
@@ -29,22 +29,26 @@ func (p *Processor) textLines(items markup.Items, width float64, baseFont style.
 	lines := []textLine{}
 	curr := textLine{}
 	for _, item := range items {
-		if ci, ok := item.(markup.ControlItem); ok && ci.Op == markup.LineFeed {
+		if ci, ok := item.(*markup.ControlItem); ok && ci.Op == markup.LineFeed {
 			lines = append(lines, curr)
 			curr = textLine{}
 			continue
 		}
-		textItem, ok := item.(markup.TextItem)
+		textItem, ok := item.(*markup.TextItem)
 		if !ok {
 			continue
 		}
+
 		p.setMarkupFont(textItem.Style, baseFont)
-		itemWidth := p.engine.TextWidth(textItem.Text)
+		itemWidth := p.engine.TextWidth(" " + textItem.Text)
 		if curr.width+itemWidth > width {
 			lines = append(lines, curr)
 			curr = textLine{}
 		}
 
+		if len(curr.items) > 0 {
+			textItem.Text = " " + textItem.Text
+		}
 		curr.items = append(curr.items, textItem)
 		curr.width += itemWidth
 	}
