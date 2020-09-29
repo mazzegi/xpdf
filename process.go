@@ -104,9 +104,11 @@ func (p *Processor) renderTextBox(box *xdoc.Box) {
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 
 	width := p.engine.EffectiveWidth(sty.Dimension.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	lineHeight := p.engine.FontHeight() * sty.Dimension.LineSpacing
 	var height float64
 	if sty.Dimension.Height < 0 {
-		height = p.textHeight(box.Text, width, sty)
+		//subtract line-spacing, to have no space below the last line
+		height = p.textHeight(box.Text, width, sty) - lineHeight + p.engine.FontHeight()
 	} else {
 		height = sty.Dimension.Height
 	}
@@ -122,13 +124,13 @@ func (p *Processor) renderTextBox(box *xdoc.Box) {
 	x0 += sty.Dimension.OffsetX
 	y0 += sty.Dimension.OffsetY
 	y1 := y0 + height + sty.Box.Padding.Top + sty.Box.Padding.Bottom
-	x1 := x0 + width
+	x1 := x0 + width + sty.Padding.Left + sty.Padding.Right
 	p.drawBox(x0, y0, x1, y1, sty)
 
 	p.engine.SetY(y0 + sty.Box.Padding.Top)
 	p.engine.SetX(x0 + sty.Box.Padding.Left)
 	p.writeText(box.Text, width, sty)
-	p.engine.LineFeed(sty.Dimension.LineHeight + sty.Box.Padding.Bottom)
+	p.engine.SetY(y1)
 }
 
 func (p *Processor) renderTable(table *xdoc.Table) {

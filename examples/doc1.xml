@@ -32,16 +32,24 @@ default-font{
 
     <body>
         <font class="default-font"/>
-        <text>
+        <!-- <text>
             Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat\
             nulla facilisis at vero eros et __accumsan__ et iusto odio dignissim qui `blandit` praesent luptatum __`zzril`__ delenit augue duis dolore            
-        </text>
+        </text> -->
 
-        <lf lines="3"/>
-
-        <box style="line-height: 1.5; width: 69; h-align: center; padding: 0,0,0,0; line-width: 0.5; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+        <box style="line-spacing: 1.5; width: 69; h-align: center; padding: 0,0,0,0; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
             Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
-            Claustro etiam numbat decesse.
+            Claustro etiam numbat decesse
+        </box>
+        <lf lines="1"/>
+        <box style="line-spacing: 1.5; width: 69; h-align: center; padding: 4,4,4,4; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+            Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
+            Claustro etiam numbat decesse
+        </box>
+        <lf lines="1"/>
+        <box style="line-spacing: 1.5; width: 69; h-align: right; padding: 2,2,2,2; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+            Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
+            Claustro etiam numbat decesse
         </box>
     </body>
 </document>

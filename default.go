@@ -17,11 +17,11 @@ func DefaultStyle() style.Styles {
 			Margin:  style.Margin{Left: 0, Top: 0, Right: 0, Bottom: 0},
 		},
 		Dimension: style.Dimension{
-			Width:      -1,
-			Height:     -1,
-			LineHeight: 1.5,
-			OffsetX:    0,
-			OffsetY:    0,
+			Width:       -1,
+			Height:      -1,
+			LineSpacing: 1.5,
+			OffsetX:     0,
+			OffsetY:     0,
 		},
 		Table: style.Table{
 			ColumnWidth: -1,

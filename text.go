@@ -65,7 +65,7 @@ func (p *Processor) textLines(s string, width float64, baseFont style.Font) []te
 func (p *Processor) textHeight(s string, width float64, sty style.Styles) float64 {
 	p.engine.ChangeFont(sty.Font)
 	lines := p.textLines(s, width, sty.Font)
-	return float64(len(lines)) * p.engine.FontHeight() * sty.Dimension.LineHeight
+	return float64(len(lines)) * p.engine.FontHeight() * sty.Dimension.LineSpacing
 }
 
 func (p *Processor) writeText(s string, width float64, sty style.Styles) {
@@ -86,6 +86,6 @@ func (p *Processor) writeText(s string, width float64, sty style.Styles) {
 			p.setMarkupFont(item.Style, sty.Font)
 			p.engine.WriteText(item.Text)
 		}
-		p.engine.LineFeed(sty.LineHeight)
+		p.engine.LineFeed(sty.LineSpacing)
 	}
 }
