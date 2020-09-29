@@ -25,7 +25,11 @@ type textLine struct {
 	width float64
 }
 
-func (p *Processor) textLines(items markup.Items, width float64, baseFont style.Font) []textLine {
+func (p *Processor) textLines(s string, width float64, baseFont style.Font) []textLine {
+	s = p.tr(s)
+	s = text.WhitespaceRectified(s)
+	items := markup.Parse(s).Words()
+
 	lines := []textLine{}
 	curr := textLine{}
 	for _, item := range items {
@@ -58,13 +62,16 @@ func (p *Processor) textLines(items markup.Items, width float64, baseFont style.
 	return lines
 }
 
+func (p *Processor) textHeight(s string, width float64, sty style.Styles) float64 {
+	p.engine.ChangeFont(sty.Font)
+	lines := p.textLines(s, width, sty.Font)
+	return float64(len(lines)) * p.engine.FontHeight() * sty.Dimension.LineHeight
+}
+
 func (p *Processor) writeText(s string, width float64, sty style.Styles) {
 	p.engine.ChangeFont(sty.Font)
-	p.engine.SetTextColor(sty.Text.R, sty.Text.G, sty.Text.B)
-	s = p.tr(s)
-	s = text.WhitespaceRectified(s)
-	items := markup.Parse(s).Words()
-	lines := p.textLines(items, width, sty.Font)
+	p.engine.SetTextColor(sty.Text.Values())
+	lines := p.textLines(s, width, sty.Font)
 	xLeft, _ := p.engine.GetXY()
 	for _, line := range lines {
 		switch sty.HAlign {

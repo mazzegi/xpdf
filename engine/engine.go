@@ -20,9 +20,20 @@ type Engine interface {
 	LineFeed(lines float64)
 	ChangeFont(fnt style.Font)
 	EffectiveWidth(width float64) float64
+	PageHeight() float64
 	PutImage(src string, x, y, width, height float64)
 	SetTextColor(r, g, b int)
 	FontHeight() float64
 	TextWidth(s string) float64
 	WriteText(s string)
+	Margins() (left, top, right, bottom float64)
+
+	//drawing stuff
+	SetLineWidth(float64)
+	SetDrawColor(r, g, b int)
+	SetFillColor(r, g, b int)
+	FillRect(x, y, width, height float64)
+	MoveTo(x, y float64)
+	LineTo(x, y float64)
+	DrawPath()
 }

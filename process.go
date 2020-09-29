@@ -86,6 +86,9 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 }
 
 func (p *Processor) renderText(text *xdoc.Text) {
+	if text.Text == "" {
+		return
+	}
 	defer p.resetStyles()
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 
@@ -94,9 +97,38 @@ func (p *Processor) renderText(text *xdoc.Text) {
 }
 
 func (p *Processor) renderTextBox(box *xdoc.Box) {
+	if box.Text == "" {
+		return
+	}
 	defer p.resetStyles()
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
-	_ = sty
+
+	width := p.engine.EffectiveWidth(sty.Dimension.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	var height float64
+	if sty.Dimension.Height < 0 {
+		height = p.textHeight(box.Text, width, sty)
+	} else {
+		height = sty.Dimension.Height
+	}
+
+	x0, y0 := p.engine.GetXY()
+	_, _, _, bm := p.engine.Margins()
+	effHeight := p.engine.PageHeight() - bm
+	if y0+height >= effHeight {
+		p.engine.AddPage()
+		x0, y0 = p.engine.GetXY()
+	}
+
+	x0 += sty.Dimension.OffsetX
+	y0 += sty.Dimension.OffsetY
+	y1 := y0 + height + sty.Box.Padding.Top + sty.Box.Padding.Bottom
+	x1 := x0 + width
+	p.drawBox(x0, y0, x1, y1, sty)
+
+	p.engine.SetY(y0 + sty.Box.Padding.Top)
+	p.engine.SetX(x0 + sty.Box.Padding.Left)
+	p.writeText(box.Text, width, sty)
+	p.engine.LineFeed(sty.Dimension.LineHeight + sty.Box.Padding.Bottom)
 }
 
 func (p *Processor) renderTable(table *xdoc.Table) {

@@ -133,6 +133,11 @@ func (e *FPDF) EffectiveWidth(width float64) float64 {
 	return width
 }
 
+func (e *FPDF) PageHeight() float64 {
+	_, ph := e.pdf.GetPageSize()
+	return ph
+}
+
 func (e *FPDF) PutImage(src string, x, y, width, height float64) {
 	e.pdf.ImageOptions(src, x, y, width, height, false, gofpdf.ImageOptions{}, 0, "")
 }
@@ -146,13 +151,44 @@ func (e *FPDF) FontHeight() float64 {
 	return heightMM
 }
 
+func (e *FPDF) Margins() (left, top, right, bottom float64) {
+	return e.pdf.GetMargins()
+}
+
 func (e *FPDF) TextWidth(s string) float64 {
 	return e.pdf.GetStringWidth(s)
 }
 
 func (e *FPDF) WriteText(s string) {
-	// x, y := e.pdf.GetXY()
-	// e.pdf.Text(x, y, s)
 	_, heightMM := e.pdf.GetFontSize()
 	e.pdf.Write(heightMM, s)
+}
+
+//drawing
+func (e *FPDF) SetLineWidth(w float64) {
+	e.pdf.SetLineWidth(w)
+}
+
+func (e *FPDF) SetDrawColor(r, g, b int) {
+	e.pdf.SetDrawColor(r, g, b)
+}
+
+func (e *FPDF) SetFillColor(r, g, b int) {
+	e.pdf.SetFillColor(r, g, b)
+}
+
+func (e *FPDF) FillRect(x, y, width, height float64) {
+	e.pdf.Rect(x, y, width, height, "F")
+}
+
+func (e *FPDF) MoveTo(x, y float64) {
+	e.pdf.MoveTo(x, y)
+}
+
+func (e *FPDF) LineTo(x, y float64) {
+	e.pdf.LineTo(x, y)
+}
+
+func (e *FPDF) DrawPath() {
+	e.pdf.DrawPath("D")
 }

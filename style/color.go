@@ -12,6 +12,10 @@ type RGB struct {
 	R, G, B int
 }
 
+func (c RGB) Values() (r, g, b int) {
+	return c.R, c.G, c.B
+}
+
 func (c RGB) String() string {
 	return fmt.Sprintf("RGB(%d,%d,%d)", c.R, c.G, c.B)
 }
