@@ -11,8 +11,14 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# PDF files
+# PDF and image files
 *.pdf
+*.png
+*.jpg
+*.jpeg
+
+# Font files
+*.ttf
 
 # Dependency directories (remove the comment below to include it)
 # vendor/

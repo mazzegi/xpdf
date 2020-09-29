@@ -2,10 +2,13 @@ package engine
 
 import (
 	"io"
+	"io/ioutil"
 
 	"github.com/jung-kurt/gofpdf/v2"
+	"github.com/mazzegi/xpdf/font"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/xdoc"
+	"github.com/pkg/errors"
 )
 
 func fpdfOrientation(o xdoc.Orientation) string {
@@ -57,7 +60,7 @@ type FPDF struct {
 	translateUnicode func(s string) string
 }
 
-func NewFPDF(doc *xdoc.Document) *FPDF {
+func NewFPDF(fonts *font.Directory, doc *xdoc.Document) (*FPDF, error) {
 	e := &FPDF{
 		pdf: gofpdf.New(
 			fpdfOrientation(doc.Page.Orientation),
@@ -66,12 +69,43 @@ func NewFPDF(doc *xdoc.Document) *FPDF {
 			"",
 		),
 	}
+	err := e.initFonts(fonts)
+	if err != nil {
+		return nil, errors.Wrap(err, "init-fonts")
+	}
+
 	e.pdf.SetAutoPageBreak(true, doc.Page.Margins.Bottom)
 	e.pdf.SetMargins(doc.Page.Margins.Left, doc.Page.Margins.Top, doc.Page.Margins.Right)
 
 	//TODO: make code-page for unicode translator an option
 	e.translateUnicode = e.pdf.UnicodeTranslatorFromDescriptor("")
-	return e
+	//e.translateUnicode = func(s string) string { return s }
+	return e, nil
+}
+
+func (e *FPDF) initFonts(fonts *font.Directory) error {
+	return fonts.Each(func(fd font.Descriptor) error {
+		bs, err := ioutil.ReadFile(fd.FilePath)
+		if err != nil {
+			return errors.Wrapf(err, "read file %q", fd.FilePath)
+		}
+		var sty string
+		switch fd.Style {
+		case font.Bold:
+			sty = "B"
+		case font.Italic:
+			sty = "I"
+		case font.BoldItalic:
+			sty = "BI"
+		default:
+			sty = ""
+		}
+		e.pdf.AddUTF8FontFromBytes(fd.Name, sty, bs)
+		if e.pdf.Error() != nil {
+			return e.pdf.Error()
+		}
+		return nil
+	})
 }
 
 func (e *FPDF) Error() error {
@@ -156,12 +190,12 @@ func (e *FPDF) Margins() (left, top, right, bottom float64) {
 }
 
 func (e *FPDF) TextWidth(s string) float64 {
-	return e.pdf.GetStringWidth(s)
+	return e.pdf.GetStringWidth(e.translateUnicode(s))
 }
 
 func (e *FPDF) WriteText(s string) {
 	_, heightMM := e.pdf.GetFontSize()
-	e.pdf.Write(heightMM, s)
+	e.pdf.Write(heightMM, e.translateUnicode(s))
 }
 
 //drawing

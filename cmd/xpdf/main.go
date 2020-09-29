@@ -8,6 +8,7 @@ import (
 
 	"github.com/mazzegi/xpdf"
 	"github.com/mazzegi/xpdf/engine"
+	"github.com/mazzegi/xpdf/font"
 	"github.com/mazzegi/xpdf/xdoc"
 )
 
@@ -41,11 +42,28 @@ func main() {
 	}
 	defer outF.Close()
 
-	engine := engine.NewFPDF(doc)
+	fonts := font.NewDirectory()
+	fonts.Register(font.Descriptor{
+		Name:     "chin",
+		Style:    font.Regular,
+		FilePath: "fonts/DroidSansFallback.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "kyr",
+		Style:    font.Regular,
+		FilePath: "fonts/cyberv2.ttf",
+	})
+
+	engine, err := engine.NewFPDF(fonts, doc)
+	if err != nil {
+		fmt.Println("ERROR create fpdf-engine:", err)
+		os.Exit(3)
+	}
+
 	p := xpdf.NewProcessor(engine, doc)
 	err = p.Process(outF)
 	if err != nil {
 		fmt.Println("ERROR processing input:", err)
-		os.Exit(3)
+		os.Exit(4)
 	}
 }

@@ -22,6 +22,29 @@ default-font{
     font-point-size: 12;
     font-style: normal;	
 }
+
+chin-font{
+    font-family: chin;
+    font-point-size: 14;
+    font-style: normal;	
+}
+
+kyr-font{
+    font-family: kyr;
+    font-point-size: 14;
+    font-style: normal;	
+}
+
+default-box{
+    line-spacing: 1.5;
+    h-align: left; 
+    padding: 2,2,2,2; 
+    line-width: 0.2;
+    text-color: #000000;
+    color: #0000FF;
+    background-color: #00FF00;
+    border: 1,1,1,1;
+}
     </style>
 
     <header>
@@ -47,9 +70,28 @@ default-font{
             Claustro etiam numbat decesse
         </box>
         <lf lines="1"/>
-        <box style="line-spacing: 1.5; width: 69; h-align: right; padding: 2,2,2,2; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+        <!-- <box style="line-spacing: 1.5; width: 69; h-align: right; padding: 2,2,2,2; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
             Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
             Claustro etiam numbat decesse
+        </box> -->
+
+        <font class="chin-font"/>
+        <box class="default-box" style="width: 100;">
+            鐵路機車車輛\
+            铁路机车车辆
         </box>
+        <lf lines="1"/>
+        <box class="default-box" style="width: 100; h-align: right;">
+            鐵路機車車輛\
+            铁路机车车辆
+        </box>
+        <font class="kyr-font"/>
+        <box class="default-box" style="width: 100; h-align: right;">
+            Русская школа в Мюнхене «Русско-немецкий образовательный центр»
+        </box>
+
+
+
+        <!-- <image style="width: 100; height: 100;">mgi_avatar_mod.png</image> -->
     </body>
 </document>
