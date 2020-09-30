@@ -49,9 +49,9 @@ func main() {
 		FilePath: "fonts/DroidSansFallback.ttf",
 	})
 	fonts.Register(font.Descriptor{
-		Name:     "kyr",
+		Name:     "dejavu",
 		Style:    font.Regular,
-		FilePath: "fonts/cyberv2.ttf",
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
 	})
 
 	engine, err := engine.NewFPDF(fonts, doc)

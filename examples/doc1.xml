@@ -29,8 +29,8 @@ chin-font{
     font-style: normal;	
 }
 
-kyr-font{
-    font-family: kyr;
+dejavu-font{
+    font-family: dejavu;
     font-point-size: 14;
     font-style: normal;	
 }
@@ -85,9 +85,12 @@ default-box{
             鐵路機車車輛\
             铁路机车车辆
         </box>
-        <font class="kyr-font"/>
-        <box class="default-box" style="width: 100; h-align: right;">
+        <font class="dejavu-font"/>
+        <box class="default-box" style="width: 100; h-align: center;">
             Русская школа в Мюнхене «Русско-немецкий образовательный центр»
+        </box>
+        <box class="default-box" style="width: 100; h-align: left;">
+            geležinkelio
         </box>
 
 

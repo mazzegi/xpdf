@@ -77,9 +77,9 @@ func NewFPDF(fonts *font.Directory, doc *xdoc.Document) (*FPDF, error) {
 	e.pdf.SetAutoPageBreak(true, doc.Page.Margins.Bottom)
 	e.pdf.SetMargins(doc.Page.Margins.Left, doc.Page.Margins.Top, doc.Page.Margins.Right)
 
-	//TODO: make code-page for unicode translator an option
-	e.translateUnicode = e.pdf.UnicodeTranslatorFromDescriptor("")
-	//e.translateUnicode = func(s string) string { return s }
+	//TODO: make code-page for unicode translator an option (per font?)
+	//e.translateUnicode = e.pdf.UnicodeTranslatorFromDescriptor("")
+	e.translateUnicode = func(s string) string { return s }
 	return e, nil
 }
 
