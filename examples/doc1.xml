@@ -42,7 +42,7 @@ default-box{
     line-width: 0.2;
     text-color: #000000;
     color: #0000FF;
-    background-color: #00FF00;
+    background-color: #FFFFaa;
     border: 1,1,1,1;
 }
     </style>
@@ -54,7 +54,7 @@ default-box{
     </footer>
 
     <body>
-        <font class="default-font"/>
+        <font class="dejavu-font"/>
         <!-- <text>
             Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat\
             nulla facilisis at vero eros et __accumsan__ et iusto odio dignissim qui `blandit` praesent luptatum __`zzril`__ delenit augue duis dolore            

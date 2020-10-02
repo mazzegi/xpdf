@@ -133,12 +133,6 @@ func (p *Processor) renderTextBox(box *xdoc.Box) {
 	p.engine.SetY(y1)
 }
 
-func (p *Processor) renderTable(table *xdoc.Table) {
-	defer p.resetStyles()
-	sty := table.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
-	_ = sty
-}
-
 func (p *Processor) renderImage(img *xdoc.Image) {
 	sty := img.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	x, y := p.engine.GetXY()
