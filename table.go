@@ -9,7 +9,7 @@ type table struct {
 	style.Styles
 	rows []*tableRow
 
-	maxColumnCount int
+	columnCount int
 }
 
 type tableRow struct {
@@ -22,12 +22,16 @@ type tableCell struct {
 	text string
 	iss  []xdoc.Instruction
 
+	rowIdx    int
+	cellIdx   int // in row
+	width     float64
 	spannedBy *tableCell
 	spans     []*tableCell
+	zero      bool
 }
 
-func (t *table) determineColumnWidths(width float64) {
-	cws := make([]float64, t.maxColumnCount)
+func (t *table) assignColumnWidths(width float64) {
+	cws := make([]float64, t.columnCount)
 	for _, row := range t.rows {
 		for ic, cell := range row.cells {
 			if cell.ColumnWidth > cws[ic] {
@@ -52,37 +56,105 @@ func (t *table) determineColumnWidths(width float64) {
 			}
 		}
 	}
+	for _, row := range t.rows {
+		for ic, cell := range row.cells {
+			for s := 0; s < cell.ColumnSpan; s++ {
+				cell.width = cws[ic]
+			}
+		}
+	}
+}
+
+func (tab *table) normalize() {
+	tab.columnCount = 0
+	for _, row := range tab.rows {
+		if len(row.cells) > tab.columnCount {
+			tab.columnCount = len(row.cells)
+		}
+	}
+	for _, row := range tab.rows {
+		for len(row.cells) < tab.columnCount {
+			row.cells = append(row.cells, &tableCell{
+				zero: true,
+			})
+		}
+	}
+	for ir, row := range tab.rows {
+		for ic, cell := range row.cells {
+			cell.rowIdx = ir
+			cell.cellIdx = ic
+		}
+	}
 }
 
 //
-func (t *table) processRowSpans() {
+func (t *table) processSpans() {
+	//col spans
+	for ir, row := range t.rows {
+		newCells := []*tableCell{}
+		for _, cell := range row.cells {
+			cell.rowIdx = ir
+			cell.cellIdx = len(newCells)
+			newCells = append(newCells, cell)
+			if cell.ColumnSpan <= 1 {
+				continue
+			}
+			for s := 0; s < cell.ColumnSpan-1; s++ {
+				spannedCell := &tableCell{
+					spannedBy: cell,
+					rowIdx:    ir,
+					cellIdx:   len(newCells),
+				}
+				spannedCell.RowSpan = cell.RowSpan
+				newCells = append(newCells, spannedCell)
+				cell.spans = append(cell.spans, spannedCell)
+			}
+		}
+		row.cells = newCells
+	}
+	//row spans
 	for ir, row := range t.rows {
 		for ic, cell := range row.cells {
+			cell.cellIdx = ic
 			if cell.RowSpan <= 1 {
+				continue
+			}
+			if cell.spannedBy != nil || cell.zero {
 				continue
 			}
 			//insert spanned cell in following rows
 			for n := 0; n < cell.RowSpan-1; n++ {
 				spannedRowIdx := ir + 1 + n
+
+				var spannedRow *tableRow
 				if spannedRowIdx >= len(t.rows) {
-					//row span exceeds table - just do nothing
-					continue
+					spannedRow = &tableRow{}
+					t.rows = append(t.rows, spannedRow)
+				} else {
+					spannedRow = t.rows[spannedRowIdx]
 				}
-				spannedRow := t.rows[spannedRowIdx]
-				if ic > len(spannedRow.cells) {
-					//if anyway cell-idx is bigger than spanned-row max cell-idx nothing has to be done (but later in render)
-					continue
+				for ic > len(spannedRow.cells) {
+					spannedRow.cells = append(spannedRow.cells, &tableCell{
+						zero:   true,
+						rowIdx: spannedRowIdx,
+					})
 				}
 
-				newCell := &tableCell{spannedBy: cell}
+				newCell := &tableCell{
+					spannedBy: cell,
+					rowIdx:    spannedRowIdx,
+				}
 				cell.spans = append(cell.spans, newCell)
 
-				newCells := append(spannedRow.cells[:ic], newCell)
+				newCells := make([]*tableCell, ic)
+				copy(newCells, spannedRow.cells[:ic])
+				newCells = append(newCells, newCell)
 				newCells = append(newCells, spannedRow.cells[ic:]...)
 				spannedRow.cells = newCells
 			}
 		}
 	}
+	t.normalize()
 }
 
 func (p *Processor) transformTable(xtab *xdoc.Table) *table {
@@ -103,11 +175,9 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 			row.cells = append(row.cells, cell)
 		}
 		tab.rows = append(tab.rows, row)
-		if len(row.cells) > tab.maxColumnCount {
-			tab.maxColumnCount = len(row.cells)
-		}
 	}
-	tab.processRowSpans()
+	tab.processSpans()
+	tab.assignColumnWidths(p.engine.EffectiveWidth(tab.Width))
 	return tab
 }
 
@@ -116,7 +186,7 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 func (p *Processor) renderTable(xtab *xdoc.Table) {
 	defer p.resetStyles()
 	tab := p.transformTable(xtab)
-	if tab.maxColumnCount == 0 {
+	if tab.columnCount == 0 {
 		return
 	}
 

@@ -161,7 +161,7 @@ func (e *FPDF) EffectiveWidth(width float64) float64 {
 	l, _, r, _ := e.pdf.GetMargins()
 	pw, _ := e.pdf.GetPageSize()
 	ew := pw - (l + r) - 3 // without subtracting 3 it doesn't fit
-	if width < 0 || width > ew {
+	if width <= 0 || width > ew {
 		return ew
 	}
 	return width
