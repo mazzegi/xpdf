@@ -1,20 +1,73 @@
 package xpdf
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/xdoc"
 )
+
+func dumpTableSpans(tab *table) string {
+	rowsl := []string{}
+	for _, row := range tab.rows {
+		rowsl = append(rowsl, dumpRowSpans(row))
+	}
+	return strings.Join(rowsl, "\n")
+}
+
+func dumpRowSpans(row *tableRow) string {
+	cellsl := []string{}
+	for _, cell := range row.cells {
+		if cell.zero {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-zero-cell]", cell.rowIdx, cell.cellIdx))
+		} else if cell.spannedBy != nil {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-byspn:%d:%d]", cell.rowIdx, cell.cellIdx, cell.spannedBy.rowIdx, cell.spannedBy.cellIdx))
+		} else if len(cell.spansCols) > 0 && len(cell.spansRows) > 0 {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-spans:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+		} else if len(cell.spansCols) > 0 {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-colsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+		} else if len(cell.spansRows) > 0 {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-rowsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+		} else {
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-regl-cell]", cell.rowIdx, cell.cellIdx))
+		}
+	}
+	return strings.Join(cellsl, ", ")
+}
+
+func dumpTableDims(tab *table) string {
+	rowsl := []string{}
+	for _, row := range tab.rows {
+		rowsl = append(rowsl, dumpRowDims(row))
+	}
+	return strings.Join(rowsl, "\n")
+}
+
+func dumpRowDims(row *tableRow) string {
+	cellsl := []string{}
+	for _, cell := range row.cells {
+		cellsl = append(cellsl, fmt.Sprintf("[%d:%d:w=%.1f:h=%.1f:mh=%.1f]", cell.rowIdx, cell.cellIdx, cell.width, cell.height, cell.minHeight))
+	}
+	return strings.Join(cellsl, ", ")
+}
+
+//
 
 type table struct {
 	style.Styles
 	rows []*tableRow
 
+	// auxiliary parameters
 	columnCount int
 }
 
 type tableRow struct {
 	style.Styles
 	cells []*tableCell
+
+	// auxiliary parameters
+	height float64
 }
 
 type tableCell struct {
@@ -22,15 +75,34 @@ type tableCell struct {
 	text string
 	iss  []xdoc.Instruction
 
+	// auxiliary parameters
 	rowIdx    int
-	cellIdx   int // in row
+	cellIdx   int
+	minHeight float64
+	height    float64
 	width     float64
 	spannedBy *tableCell
-	spans     []*tableCell
+	spansCols []*tableCell
+	spansRows []*tableCell
 	zero      bool
 }
 
+func (c *tableCell) dim() (width, height float64) {
+	width = c.width
+	height = c.height
+	for _, sc := range c.spansCols {
+		width += sc.width
+	}
+	for _, sc := range c.spansRows {
+		height += sc.height
+	}
+	return
+}
+
+//
+
 func (t *table) assignColumnWidths(width float64) {
+	//TODO: think about considering column-widths as fractions from a sum of widths to avoid overflowing
 	cws := make([]float64, t.columnCount)
 	for _, row := range t.rows {
 		for ic, cell := range row.cells {
@@ -58,9 +130,7 @@ func (t *table) assignColumnWidths(width float64) {
 	}
 	for _, row := range t.rows {
 		for ic, cell := range row.cells {
-			for s := 0; s < cell.ColumnSpan; s++ {
-				cell.width = cws[ic]
-			}
+			cell.width = cws[ic]
 		}
 	}
 }
@@ -88,13 +158,10 @@ func (tab *table) normalize() {
 }
 
 //
-func (t *table) processSpans() {
-	//col spans
-	for ir, row := range t.rows {
+func (t *table) processColumnSpans() {
+	for _, row := range t.rows {
 		newCells := []*tableCell{}
 		for _, cell := range row.cells {
-			cell.rowIdx = ir
-			cell.cellIdx = len(newCells)
 			newCells = append(newCells, cell)
 			if cell.ColumnSpan <= 1 {
 				continue
@@ -102,20 +169,19 @@ func (t *table) processSpans() {
 			for s := 0; s < cell.ColumnSpan-1; s++ {
 				spannedCell := &tableCell{
 					spannedBy: cell,
-					rowIdx:    ir,
-					cellIdx:   len(newCells),
 				}
 				spannedCell.RowSpan = cell.RowSpan
 				newCells = append(newCells, spannedCell)
-				cell.spans = append(cell.spans, spannedCell)
+				cell.spansCols = append(cell.spansCols, spannedCell)
 			}
 		}
 		row.cells = newCells
 	}
-	//row spans
+}
+
+func (t *table) processRowSpans() {
 	for ir, row := range t.rows {
 		for ic, cell := range row.cells {
-			cell.cellIdx = ic
 			if cell.RowSpan <= 1 {
 				continue
 			}
@@ -135,16 +201,14 @@ func (t *table) processSpans() {
 				}
 				for ic > len(spannedRow.cells) {
 					spannedRow.cells = append(spannedRow.cells, &tableCell{
-						zero:   true,
-						rowIdx: spannedRowIdx,
+						zero: true,
 					})
 				}
 
 				newCell := &tableCell{
 					spannedBy: cell,
-					rowIdx:    spannedRowIdx,
 				}
-				cell.spans = append(cell.spans, newCell)
+				cell.spansRows = append(cell.spansRows, newCell)
 
 				newCells := make([]*tableCell, ic)
 				copy(newCells, spannedRow.cells[:ic])
@@ -154,20 +218,92 @@ func (t *table) processSpans() {
 			}
 		}
 	}
+}
+
+func (t *table) processSpans() {
+	t.processColumnSpans()
+	t.processRowSpans()
 	t.normalize()
+}
+
+func (p *Processor) assignCellMinHeight(cell *tableCell) {
+	if cell.spannedBy != nil || cell.zero {
+		return
+	}
+	if cell.Height > 0 {
+		// if set by style
+		cell.minHeight = cell.Height
+		return
+	}
+	availableWidth := cell.width
+	for _, sc := range cell.spansCols {
+		availableWidth += sc.width
+	}
+	availableWidth -= cell.Padding.Left + cell.Padding.Right
+	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles)
+	cellHeight := textHeight + cell.Padding.Top + cell.Padding.Bottom
+
+	// if cell spans rows, divide height to spanned cells
+	heightPerCell := cellHeight / float64(1+len(cell.spansRows))
+	cell.minHeight = heightPerCell
+	for _, sc := range cell.spansRows {
+		sc.minHeight = heightPerCell
+	}
+}
+
+func (p *Processor) assignHeights(tab *table) {
+	for _, row := range tab.rows {
+		for _, cell := range row.cells {
+			p.assignCellMinHeight(cell)
+		}
+	}
+	//no check for each row
+	for _, row := range tab.rows {
+		var maxCellHeight float64
+		for _, cell := range row.cells {
+			if cell.minHeight > maxCellHeight {
+				maxCellHeight = cell.minHeight
+			}
+		}
+		row.height = maxCellHeight
+	}
+
+	for _, row := range tab.rows {
+		for _, cell := range row.cells {
+			cell.height = row.height
+		}
+	}
 }
 
 func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 	tab := &table{
 		Styles: xtab.MutatedStyles(p.doc.StyleClasses(), p.currStyles),
 	}
-	for _, xrow := range xtab.Rows {
-		row := &tableRow{
-			Styles: xrow.MutatedStyles(p.doc.StyleClasses(), tab.Styles),
+	for ir, xrow := range xtab.Rows {
+		var rowSty style.Styles
+		switch {
+		case ir == 0:
+			rowSty = xrow.MutatedStylesWithSelector("first-row", p.doc.StyleClasses(), tab.Styles)
+		case ir == len(xtab.Rows)-1:
+			rowSty = xrow.MutatedStylesWithSelector("last-row", p.doc.StyleClasses(), tab.Styles)
+		default:
+			rowSty = xrow.MutatedStyles(p.doc.StyleClasses(), tab.Styles)
 		}
-		for _, xcell := range xrow.Cells {
+		row := &tableRow{
+			Styles: rowSty,
+		}
+		for ic, xcell := range xrow.Cells {
+			var cellSty style.Styles
+			switch {
+			case ic == 0:
+				cellSty = xcell.MutatedStylesWithSelector("first-cell", p.doc.StyleClasses(), row.Styles)
+			case ic == len(xrow.Cells)-1:
+				cellSty = xcell.MutatedStylesWithSelector("last-cell", p.doc.StyleClasses(), row.Styles)
+			default:
+				cellSty = xcell.MutatedStyles(p.doc.StyleClasses(), row.Styles)
+			}
 			cell := &tableCell{
-				Styles: xcell.MutatedStyles(p.doc.StyleClasses(), row.Styles),
+				Styles: cellSty,
 				text:   xcell.Content,
 				iss:    xcell.Instructions,
 			}
@@ -177,7 +313,9 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 		tab.rows = append(tab.rows, row)
 	}
 	tab.processSpans()
-	tab.assignColumnWidths(p.engine.EffectiveWidth(tab.Width))
+	tab.assignColumnWidths(p.page().EffectiveWidth(tab.Width))
+	p.assignHeights(tab)
+	//TODO: reapply styles as first/last row/cell may have changed
 	return tab
 }
 
@@ -189,6 +327,53 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	if tab.columnCount == 0 {
 		return
 	}
+	Logf("table-spans:\n%s", dumpTableSpans(tab))
+	Logf("table-dims:\n%s", dumpTableDims(tab))
 
-	_ = tab
+	page := p.page()
+	x0, y := p.engine.GetXY()
+	for _, row := range tab.rows {
+		if y+row.height > page.printableArea.y1 {
+			p.engine.AddPage()
+			_, y = p.engine.GetXY()
+		}
+		x := x0
+		for _, cell := range row.cells {
+			if cell.spannedBy != nil || cell.zero {
+				x += cell.width
+				continue
+			}
+			cw, ch := cell.dim()
+			p.renderCell(PrintableArea{
+				x0: x,
+				y0: y,
+				x1: x + cw,
+				y1: y + ch,
+			}, cell)
+			x += cell.width
+		}
+		y += row.height
+		p.engine.SetX(x0)
+	}
+	p.engine.SetY(y)
+}
+
+func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
+	p.drawBox(pa.x0, pa.y0, pa.x1, pa.y1, cell.Styles)
+
+	p.engine.SetY(pa.y0 + cell.Padding.Top)
+	p.engine.SetX(pa.x0 + cell.Padding.Left)
+	if cell.text != "" {
+		p.writeText(cell.text, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
+	}
+
+	for _, is := range cell.iss {
+		p.engine.SetX(pa.x0 + cell.Padding.Left)
+		switch is := is.(type) {
+		case *xdoc.Box:
+			p.renderTextBox(is)
+		case *xdoc.Image:
+			p.renderImage(is)
+		}
+	}
 }

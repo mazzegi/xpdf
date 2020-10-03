@@ -19,7 +19,9 @@ type Engine interface {
 	GetXY() (float64, float64)
 	LineFeed(lines float64)
 	ChangeFont(fnt style.Font)
-	EffectiveWidth(width float64) float64
+	//EffectiveWidth(width float64) float64
+	PrintableArea() (x0, y0, x1, y1 float64)
+	PageWidth() float64
 	PageHeight() float64
 	PutImage(src string, x, y, width, height float64)
 	SetTextColor(r, g, b int)

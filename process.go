@@ -57,6 +57,21 @@ func (p *Processor) changeFont(fnt style.Font) {
 	p.engine.ChangeFont(p.currStyles.Font)
 }
 
+func (p *Processor) page() Page {
+	x0, y0, x1, y1 := p.engine.PrintableArea()
+	page := Page{
+		width:  p.engine.PageWidth(),
+		height: p.engine.PageHeight(),
+		printableArea: PrintableArea{
+			x0: x0,
+			y0: y0,
+			x1: x1,
+			y1: y1,
+		},
+	}
+	return page
+}
+
 func (p *Processor) resetStyles() {
 	p.engine.ChangeFont(p.currStyles.Font)
 	p.engine.SetTextColor(p.currStyles.Text.R, p.currStyles.Text.G, p.currStyles.Text.B)
@@ -91,8 +106,7 @@ func (p *Processor) renderText(text *xdoc.Text) {
 	}
 	defer p.resetStyles()
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
-
-	width := p.engine.EffectiveWidth(sty.Dimension.Width)
+	width := p.page().EffectiveWidth(sty.Width)
 	p.writeText(text.Text, width, sty)
 }
 
@@ -103,7 +117,7 @@ func (p *Processor) renderTextBox(box *xdoc.Box) {
 	defer p.resetStyles()
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 
-	width := p.engine.EffectiveWidth(sty.Dimension.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	width := p.page().EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
 	lineHeight := p.engine.FontHeight() * sty.Dimension.LineSpacing
 	var height float64
 	if sty.Dimension.Height < 0 {

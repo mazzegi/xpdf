@@ -17,7 +17,7 @@ func main() {
 	if len(os.Args) < 2 {
 		// fmt.Println("usage: xpdf <in> <optional:out>")
 		// os.Exit(1)
-		in = "../../examples/doc1.xml"
+		in = "../../examples/table1.xml"
 	} else {
 		in = os.Args[1]
 	}

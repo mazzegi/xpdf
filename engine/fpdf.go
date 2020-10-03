@@ -157,19 +157,20 @@ func (e *FPDF) ChangeFont(fnt style.Font) {
 	e.pdf.SetFont(string(fnt.Family), fpdfFontStyle(fnt), float64(fnt.PointSize))
 }
 
-func (e *FPDF) EffectiveWidth(width float64) float64 {
-	l, _, r, _ := e.pdf.GetMargins()
-	pw, _ := e.pdf.GetPageSize()
-	ew := pw - (l + r) - 3 // without subtracting 3 it doesn't fit
-	if width <= 0 || width > ew {
-		return ew
-	}
-	return width
+func (e *FPDF) PrintableArea() (x0, y0, x1, y1 float64) {
+	l, t, r, b := e.pdf.GetMargins()
+	pw, ph := e.pdf.GetPageSize()
+	return l, t, pw - r, ph - b
 }
 
 func (e *FPDF) PageHeight() float64 {
 	_, ph := e.pdf.GetPageSize()
 	return ph
+}
+
+func (e *FPDF) PageWidth() float64 {
+	pw, _ := e.pdf.GetPageSize()
+	return pw
 }
 
 func (e *FPDF) PutImage(src string, x, y, width, height float64) {
