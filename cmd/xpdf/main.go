@@ -18,6 +18,7 @@ func main() {
 		// fmt.Println("usage: xpdf <in> <optional:out>")
 		// os.Exit(1)
 		in = "../../examples/table1.xml"
+		//in = "../../examples/doc1.xml"
 	} else {
 		in = os.Args[1]
 	}

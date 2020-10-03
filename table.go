@@ -241,9 +241,7 @@ func (p *Processor) assignCellMinHeight(cell *tableCell) {
 		availableWidth += sc.width
 	}
 	availableWidth -= cell.Padding.Left + cell.Padding.Right
-	lineHeight := p.engine.FontHeight() * cell.LineSpacing
-	//subtract line-spacing, to have no space below the last line
-	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles) - lineHeight + p.engine.FontHeight()
+	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles)
 	cellHeight := textHeight + cell.Padding.Top + cell.Padding.Bottom
 
 	// if cell spans rows, divide height to spanned cells
@@ -330,8 +328,8 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	if tab.columnCount == 0 {
 		return
 	}
-	Logf("table-spans:\n%s", dumpTableSpans(tab))
-	Logf("table-dims:\n%s", dumpTableDims(tab))
+	// Logf("table-spans:\n%s", dumpTableSpans(tab))
+	// Logf("table-dims:\n%s", dumpTableDims(tab))
 
 	page := p.page()
 	x0, y := p.engine.GetXY()
@@ -364,19 +362,40 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 	p.drawBox(pa.x0, pa.y0, pa.x1, pa.y1, cell.Styles)
 
-	p.engine.SetY(pa.y0 + cell.Padding.Top)
-	p.engine.SetX(pa.x0 + cell.Padding.Left)
+	paddedPa := pa.WithPadding(cell.Padding)
 	if cell.text != "" {
+		textHeight := p.textHeight(cell.text, paddedPa.Width(), cell.Styles)
+		textMargin := paddedPa.Height() - textHeight
+		switch cell.VAlign {
+		case style.VAlignMiddle:
+			p.engine.SetY(paddedPa.y0 + textMargin/2)
+		case style.VAlignBottom:
+			p.engine.SetY(paddedPa.y0 + textMargin)
+		default: //style.VAlignTop:
+			p.engine.SetY(paddedPa.y0)
+		}
+		p.engine.SetX(paddedPa.x0)
 		p.writeText(cell.text, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
 	}
 
 	for _, is := range cell.iss {
-		p.engine.SetX(pa.x0 + cell.Padding.Left)
 		switch is := is.(type) {
 		case *xdoc.Box:
-			p.renderTextBox(is)
+			height := p.textBoxHeight(is, paddedPa)
+			switch cell.VAlign {
+			case style.VAlignMiddle:
+				p.engine.SetY(paddedPa.y0 + height/2)
+			case style.VAlignBottom:
+				p.engine.SetY(paddedPa.y0 + height)
+			default: //style.VAlignTop:
+				p.engine.SetY(paddedPa.y0)
+			}
+			p.engine.SetX(paddedPa.x0)
+			p.renderTextBox(is, paddedPa)
 		case *xdoc.Image:
-			p.renderImage(is)
+			p.engine.SetY(paddedPa.y0) // attention: set-y resets also x to left-margin
+			p.engine.SetX(paddedPa.x0)
+			p.renderImage(is, paddedPa)
 		}
 	}
 }

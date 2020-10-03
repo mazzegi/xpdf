@@ -40,7 +40,12 @@
         h-align: right;
     }
     align-left{
-        h-align: right;
+        h-align: left;
+    }
+    perc-box{
+        line-width: 0.1;
+        border: 1,1,1,1;
+        padding: 1,1,1,1;
     }
     </style>
 
@@ -80,12 +85,12 @@
                 <td>__4__: c4 e4; kf3 c6</td>
                 <!-- td>laoreet dolore magna aliquam</td> -->
                 <td>quam nautilus</td>
-                <td>sed igitur</td>
+                <td style="v-align: bottom;">sed igitur</td>
             </tr>
             <tr>
                 <td>__5__: c4 e4; kf3 c6</td>
                 <td>laoreet dolore magna aliquam</td>
-                <td class="align-center" style="row-span: 2; column-span: 2;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
+                <td class="align-center" style="v-align: middle; row-span: 2; column-span: 2;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
                 <!--<td>sed igitur</td>-->
             </tr>
             <tr>
@@ -103,9 +108,40 @@
             <tr>
                 <td>__8__: c4 e4; kf3 c6</td>
             </tr>
+            <tr>
+                <td>__9__: c4 e4; kf3 c6</td>
+                <td class="align-left">laoreet dolore magna aliquam</td>
+                <td>quam nautilus</td>
+                <td>sed igitur</td>
+            </tr>
+            <tr>
+                <td>__10__: c4 e4; kf3 c6</td>
+                <td style="height: 14;">
+                    <!-- <image style="width: 10; height: 10;">virus.png</image> -->
+                    <image>virus.png</image>
+                    <!-- <image style="offset-x: 12; width: 10; height: 10;">virus.png</image> -->
+                </td>
+                <td>quam nautilus</td>
+                <td>sed igitur</td>
+            </tr>
+            <tr>
+                <td>__11__: c4 e4; kf3 c6</td>
+                <td class="align-left">laoreet dolore magna aliquam</td>
+                <td>quam nautilus</td>
+                <td>sed igitur</td>
+            </tr>
+            <tr>
+                <td>__12__: c4 e4; kf3 c6</td>
+                <td class="align-left">laoreet dolore magna aliquam</td>
+                <td style="v-align: middle;">
+                    <box class="perc-box">87.3%</box>
+                </td>
+                <td>sed igitur</td>
+            </tr>
         </table>
 
         <lf lines="1"/>
         <text>Sic!</text>
+        <image style="width: 10; height: 10;">virus.png</image>
     </body>
 </document>

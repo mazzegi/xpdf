@@ -89,13 +89,13 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 		case *xdoc.SetY:
 			p.engine.SetY(i.Y)
 		case *xdoc.Box:
-			p.renderTextBox(i)
+			p.renderTextBox(i, p.page().printableArea)
 		case *xdoc.Text:
 			p.renderText(i)
 		case *xdoc.Table:
 			p.renderTable(i)
 		case *xdoc.Image:
-			p.renderImage(i)
+			p.renderImage(i, p.page().printableArea)
 		}
 	}
 }
@@ -110,19 +110,33 @@ func (p *Processor) renderText(text *xdoc.Text) {
 	p.writeText(text.Text, width, sty)
 }
 
-func (p *Processor) renderTextBox(box *xdoc.Box) {
+func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
+	if box.Text == "" {
+		return 0
+	}
+	defer p.resetStyles()
+	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
+	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	var height float64
+	if sty.Dimension.Height < 0 {
+		height = p.textHeight(box.Text, width, sty)
+	} else {
+		height = sty.Dimension.Height
+	}
+	return height
+}
+
+func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	if box.Text == "" {
 		return
 	}
 	defer p.resetStyles()
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 
-	width := p.page().EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
-	lineHeight := p.engine.FontHeight() * sty.Dimension.LineSpacing
+	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
 	var height float64
 	if sty.Dimension.Height < 0 {
-		//subtract line-spacing, to have no space below the last line
-		height = p.textHeight(box.Text, width, sty) - lineHeight + p.engine.FontHeight()
+		height = p.textHeight(box.Text, width, sty)
 	} else {
 		height = sty.Dimension.Height
 	}
@@ -147,10 +161,14 @@ func (p *Processor) renderTextBox(box *xdoc.Box) {
 	p.engine.SetY(y1)
 }
 
-func (p *Processor) renderImage(img *xdoc.Image) {
+func (p *Processor) renderImage(img *xdoc.Image, pa PrintableArea) {
 	sty := img.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	x, y := p.engine.GetXY()
 	x += sty.Dimension.OffsetX
 	y += sty.Dimension.OffsetY
-	p.engine.PutImage(img.Source, x, y, sty.Dimension.Width, sty.Dimension.Height)
+	width, height := sty.Width, sty.Height
+	if width <= 0 || height <= 0 || width > pa.Width() || height > pa.Height() {
+		width, height = pa.Width(), pa.Height()
+	}
+	p.engine.PutImage(img.Source, x, y, width, height)
 }
