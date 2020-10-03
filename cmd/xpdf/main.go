@@ -53,6 +53,16 @@ func main() {
 		Style:    font.Regular,
 		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
 	})
+	fonts.Register(font.Descriptor{
+		Name:     "dejavu",
+		Style:    font.Bold,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "dejavu",
+		Style:    font.Italic,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
+	})
 
 	engine, err := engine.NewFPDF(fonts, doc)
 	if err != nil {

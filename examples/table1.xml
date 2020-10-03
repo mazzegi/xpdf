@@ -23,16 +23,24 @@
         font-style: normal;	
     }
     default-table{
-        font-family: arial;
+        font-family: dejavu;
         font-point-size: 12;
         font-style: normal;	
         line-width: 0.2;
         border: 1,1,1,1;
-        padding: 0,0,0,0;
+        padding: 2,2,2,2;
     }
     table-header{
-        background-color: #dddddd;
+        background-color: #dddddd;        
+    }
+    align-center{
         h-align: center;
+    }
+    align-right{
+        h-align: right;
+    }
+    align-left{
+        h-align: right;
     }
     </style>
 
@@ -44,7 +52,7 @@
 
     <body>
         <table class="default-table">
-            <tr class="table-header">
+            <tr class="table-header align-center">
                 <td>__Number__</td>
                 <td>__Description__</td>
                 <td>__Label__</td>
@@ -52,19 +60,19 @@
             </tr>
             <tr>
                 <td>__1__: c4 e4; kf3 c6</td>
-                <td style="column-span: 2;">laoreet dolore magna aliquam</td>
+                <td class="align-right" style="column-span: 2;">laoreet dolore magna aliquam</td>
                 <!-- <td>quam nautilus</td> -->
                 <td>sed igitur</td>
             </tr>
             <tr>
                 <td>__2__: c4 e4; kf3 c6</td>
-                <td>laoreet dolore magna aliquam</td>
+                <td class="align-right">laoreet dolore magna aliquam</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
             <tr>
                 <td>__3__: c4 e4; kf3 c6</td>
-                <td style="row-span: 2;">laoreet dolore magna aliquam confidate ora plus equipio</td>
+                <td class="align-right" style="row-span: 2;">laoreet dolore magna aliquam confidate ora plus equipio</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
@@ -77,7 +85,7 @@
             <tr>
                 <td>__5__: c4 e4; kf3 c6</td>
                 <td>laoreet dolore magna aliquam</td>
-                <td style="row-span: 2; column-span: 2;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
+                <td class="align-center" style="row-span: 2; column-span: 2;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
                 <!--<td>sed igitur</td>-->
             </tr>
             <tr>
@@ -97,7 +105,7 @@
             </tr>
         </table>
 
-				<lf lines="1"/>
-        <text>Sic!</text>        
+        <lf lines="1"/>
+        <text>Sic!</text>
     </body>
 </document>

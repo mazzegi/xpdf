@@ -76,6 +76,7 @@ type tableCell struct {
 	iss  []xdoc.Instruction
 
 	// auxiliary parameters
+	//TODO: replace colspan/rowspan styles by corresponding attrs
 	rowIdx    int
 	cellIdx   int
 	minHeight float64
@@ -240,7 +241,9 @@ func (p *Processor) assignCellMinHeight(cell *tableCell) {
 		availableWidth += sc.width
 	}
 	availableWidth -= cell.Padding.Left + cell.Padding.Right
-	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles)
+	lineHeight := p.engine.FontHeight() * cell.LineSpacing
+	//subtract line-spacing, to have no space below the last line
+	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles) - lineHeight + p.engine.FontHeight()
 	cellHeight := textHeight + cell.Padding.Top + cell.Padding.Bottom
 
 	// if cell spans rows, divide height to spanned cells
