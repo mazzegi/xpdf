@@ -56,6 +56,7 @@
     </footer>
 
     <body>
+        <sety y="190"/>
         <table class="default-table">
             <tr class="table-header align-center">
                 <td>__Number__</td>
@@ -135,6 +136,15 @@
                 <td class="align-left">laoreet dolore magna aliquam</td>
                 <td style="v-align: middle;">
                     <box class="perc-box">87.3%</box>
+                </td>
+                <td>sed igitur</td>
+            </tr>
+            <tr>
+                <td>__13__: c4 e4; kf3 c6</td>
+                <td class="align-left">laoreet dolore magna aliquam</td>
+                <td style="v-align: middle;">
+                    <box class="perc-box" style="width: 40; background-color: #aaaaff;"></box>
+                    <box class="perc-box" style="width: 20;">87.3%</box>
                 </td>
                 <td>sed igitur</td>
             </tr>

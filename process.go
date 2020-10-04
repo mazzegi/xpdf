@@ -111,15 +111,16 @@ func (p *Processor) renderText(text *xdoc.Text) {
 }
 
 func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
-	if box.Text == "" {
-		return 0
-	}
 	defer p.resetStyles()
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
-	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right
 	var height float64
-	if sty.Dimension.Height < 0 {
-		height = p.textHeight(box.Text, width, sty)
+	if sty.Dimension.Height <= 0 {
+		if box.Text == "" {
+			height = p.engine.FontHeight()
+		} else {
+			height = p.textHeight(box.Text, width, sty)
+		}
 	} else {
 		height = sty.Dimension.Height
 	}
@@ -127,16 +128,17 @@ func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
 }
 
 func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
-	if box.Text == "" {
-		return
-	}
 	defer p.resetStyles()
 	sty := box.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 
-	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right - 3
+	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right
 	var height float64
-	if sty.Dimension.Height < 0 {
-		height = p.textHeight(box.Text, width, sty)
+	if sty.Dimension.Height <= 0 {
+		if box.Text != "" {
+			height = p.textHeight(box.Text, width, sty)
+		} else {
+			height = p.engine.FontHeight()
+		}
 	} else {
 		height = sty.Dimension.Height
 	}
@@ -157,7 +159,9 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 
 	p.engine.SetY(y0 + sty.Box.Padding.Top)
 	p.engine.SetX(x0 + sty.Box.Padding.Left)
-	p.writeText(box.Text, width, sty)
+	if box.Text != "" {
+		p.writeText(box.Text, width, sty)
+	}
 	p.engine.SetY(y1)
 }
 

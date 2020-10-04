@@ -43,6 +43,7 @@ func (p *Processor) textLines(s string, width float64, baseFont style.Font) []te
 			continue
 		}
 
+		//TODO: Hyphenation
 		p.setMarkupFont(textItem.Style, baseFont)
 		itemWidth := p.engine.TextWidth(" " + textItem.Text)
 		if curr.width+itemWidth > width {

@@ -70,6 +70,17 @@ type tableRow struct {
 	height float64
 }
 
+func (row *tableRow) maxCellHeight() float64 {
+	var max float64
+	for _, cell := range row.cells {
+		_, ch := cell.dim()
+		if ch > max {
+			max = ch
+		}
+	}
+	return max
+}
+
 type tableCell struct {
 	style.Styles
 	text string
@@ -331,10 +342,12 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	// Logf("table-spans:\n%s", dumpTableSpans(tab))
 	// Logf("table-dims:\n%s", dumpTableDims(tab))
 
+	//TODO: add a "repeat first row on page-break" option
+	//TODO: refine measures (boxes and margins)
 	page := p.page()
 	x0, y := p.engine.GetXY()
 	for _, row := range tab.rows {
-		if y+row.height > page.printableArea.y1 {
+		if y+row.maxCellHeight() > page.printableArea.y1 {
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
 		}
