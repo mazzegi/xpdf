@@ -1,0 +1,46 @@
+<document>
+
+    <meta>
+        <author>mazzegi</author>
+        <creator>MPDF</creator>
+        <subject>Sample 1</subject>
+    </meta>
+    <page>
+        <orientation>portrait</orientation>
+        <format>a4</format>
+        <margins>
+            <left>30</left>
+            <top>30</top>
+            <right>15</right>
+            <bottom>20</bottom>
+        </margins>
+    </page>
+
+    <style>
+box{
+    font-family: dejavu;
+    font-point-size: 14;
+    font-style: normal;	
+
+    width: 30;
+    line-spacing: 1.5;
+    h-align: center; 
+    padding: 2,2,2,2; 
+    line-width: 0.2;
+    text-color: #000000;    
+    border: 1,1,1,1;
+}
+    </style>
+
+    <header>
+    </header>
+
+    <footer>
+    </footer>
+
+    <body>
+        <box class="box">
+            MegajhS
+        </box>
+    </body>
+</document>

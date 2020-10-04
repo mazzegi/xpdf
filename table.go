@@ -406,7 +406,7 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 			p.engine.SetX(paddedPa.x0)
 			p.renderTextBox(is, paddedPa)
 		case *xdoc.Image:
-			p.engine.SetY(paddedPa.y0) // attention: set-y resets also x to left-margin
+			p.engine.SetY(paddedPa.y0)
 			p.engine.SetX(paddedPa.x0)
 			p.renderImage(is, paddedPa)
 		}

@@ -17,8 +17,9 @@ func main() {
 	if len(os.Args) < 2 {
 		// fmt.Println("usage: xpdf <in> <optional:out>")
 		// os.Exit(1)
-		in = "../../examples/table1.xml"
-		//in = "../../examples/doc1.xml"
+		//in = "../../examples/measure.xml"
+		//in = "../../examples/table1.xml"
+		in = "../../examples/doc1.xml"
 	} else {
 		in = os.Args[1]
 	}
@@ -63,6 +64,21 @@ func main() {
 		Name:     "dejavu",
 		Style:    font.Italic,
 		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "dejavu-serif",
+		Style:    font.Regular,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "dejavu-serif",
+		Style:    font.Bold,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "dejavu-serif",
+		Style:    font.Italic,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
 	})
 
 	engine, err := engine.NewFPDF(fonts, doc)

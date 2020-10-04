@@ -141,7 +141,8 @@ func (e *FPDF) SetX(x float64) {
 }
 
 func (e *FPDF) SetY(y float64) {
-	e.pdf.SetY(y)
+	//prevent reset fo x-value
+	e.pdf.SetXY(e.pdf.GetX(), y)
 }
 
 func (e *FPDF) GetXY() (float64, float64) {
@@ -160,7 +161,7 @@ func (e *FPDF) ChangeFont(fnt style.Font) {
 func (e *FPDF) PrintableArea() (x0, y0, x1, y1 float64) {
 	l, t, r, b := e.pdf.GetMargins()
 	pw, ph := e.pdf.GetPageSize()
-	return l, t, pw - r, ph - b
+	return l, t, pw - r - 1, ph - b
 }
 
 func (e *FPDF) PageHeight() float64 {
