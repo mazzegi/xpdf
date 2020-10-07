@@ -22,82 +22,6 @@ func TestParse(t *testing.T) {
 	t.Logf("pattern: %q", p.String())
 }
 
-func TestParseSet(t *testing.T) {
-	buf := bytes.NewBufferString(enUsPatterns)
-	t0 := time.Now()
-	ps, err := parsePatterns(buf)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-	t.Logf("parsed %d patterns in %s", len(ps.patterns), time.Since(t0))
-}
-
-func TestSubWords(t *testing.T) {
-	s := ".hyphenation."
-	size := 1
-	subs := subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	size = 2
-	subs = subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	size = 3
-	subs = subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	size = 8
-	subs = subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	size = 13
-	subs = subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	size = 15
-	subs = subWords(s, size)
-	t.Logf("subs(%d): %v", size, subs)
-
-	allSubs := allSubWords(s)
-	t.Logf("all-subs: %v", allSubs)
-}
-
-func TestPatternMatch(t *testing.T) {
-	buf := bytes.NewBufferString(enUsPatterns)
-	pl, err := parsePatterns(buf)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-
-	var s string
-	var ps []Pattern
-	var wps Pattern
-
-	s = ".hyphenation."
-	ps = matchingPatterns(pl, s)
-	for _, p := range ps {
-		t.Logf("p: %q", p.String())
-	}
-	wps = weightedWordPattern(ps, s)
-	t.Logf("weighted-word-pattern: %q", wps.String())
-
-	s = ".concatenation."
-	ps = matchingPatterns(pl, s)
-	for _, p := range ps {
-		t.Logf("p: %q", p.String())
-	}
-	wps = weightedWordPattern(ps, s)
-	t.Logf("weighted-word-pattern: %q", wps.String())
-
-	// s = ".supercalifragilisticexpialidocious."
-	// ps = matchingPatterns(pl, s)
-	// for _, p := range ps {
-	// 	t.Logf("p: %q", p.String())
-	// }
-	// wps = weightedWordPattern(ps, s)
-	// t.Logf("weighted-word-pattern: %q", wps.String())
-}
-
 func TestHyhenation(t *testing.T) {
 	buf := bytes.NewBufferString(enUsPatterns)
 	pl, err := parsePatterns(buf)
@@ -124,19 +48,4 @@ func TestHyhenation(t *testing.T) {
 	t0 = time.Now()
 	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
-}
-
-func TestSpeedData(t *testing.T) {
-	buf := bytes.NewBufferString(enUsPatterns)
-	l, err := New(buf)
-	if err != nil {
-		t.Fatalf("new speeddata: %v", err)
-	}
-
-	var hyphens []int
-	var s string
-
-	s = "concatenation"
-	hyphens = l.Hyphenate(s)
-	t.Logf("%s: %v", s, hyphens)
 }
