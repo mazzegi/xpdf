@@ -69,12 +69,16 @@ func TestPatternMatch(t *testing.T) {
 		t.Fatalf("parse: %v", err)
 	}
 
-	s := ".hyphenation."
-	ps := matchingPatterns(pl, s)
+	var s string
+	var ps []Pattern
+	var wps Pattern
+
+	s = ".hyphenation."
+	ps = matchingPatterns(pl, s)
 	for _, p := range ps {
 		t.Logf("p: %q", p.String())
 	}
-	wps := weightedWordPattern(ps, s)
+	wps = weightedWordPattern(ps, s)
 	t.Logf("weighted-word-pattern: %q", wps.String())
 
 	s = ".concatenation."
@@ -85,13 +89,13 @@ func TestPatternMatch(t *testing.T) {
 	wps = weightedWordPattern(ps, s)
 	t.Logf("weighted-word-pattern: %q", wps.String())
 
-	s = ".supercalifragilisticexpialidocious."
-	ps = matchingPatterns(pl, s)
-	for _, p := range ps {
-		t.Logf("p: %q", p.String())
-	}
-	wps = weightedWordPattern(ps, s)
-	t.Logf("weighted-word-pattern: %q", wps.String())
+	// s = ".supercalifragilisticexpialidocious."
+	// ps = matchingPatterns(pl, s)
+	// for _, p := range ps {
+	// 	t.Logf("p: %q", p.String())
+	// }
+	// wps = weightedWordPattern(ps, s)
+	// t.Logf("weighted-word-pattern: %q", wps.String())
 }
 
 func TestHyhenation(t *testing.T) {
@@ -103,16 +107,36 @@ func TestHyhenation(t *testing.T) {
 
 	s := "hyphenation"
 	t0 := time.Now()
-	hsl := hyphenated(pl, s)
+	hsl := Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 
 	s = "concatenation"
 	t0 = time.Now()
-	hsl = hyphenated(pl, s)
+	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 
 	s = "supercalifragilisticexpialidocious"
 	t0 = time.Now()
-	hsl = hyphenated(pl, s)
+	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+
+	s = "Developer"
+	t0 = time.Now()
+	hsl = Hyphenated(pl, s)
+	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+}
+
+func TestSpeedData(t *testing.T) {
+	buf := bytes.NewBufferString(enUsPatterns)
+	l, err := New(buf)
+	if err != nil {
+		t.Fatalf("new speeddata: %v", err)
+	}
+
+	var hyphens []int
+	var s string
+
+	s = "concatenation"
+	hyphens = l.Hyphenate(s)
+	t.Logf("%s: %v", s, hyphens)
 }

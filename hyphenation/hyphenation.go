@@ -1,6 +1,8 @@
 package hyphenation
 
-import "strings"
+import (
+	"strings"
+)
 
 func subWords(s string, size int) []string {
 	subs := []string{}
@@ -43,10 +45,10 @@ func maxWeight(r1, r2 rune, ps []Pattern) int {
 		for i := 0; i < len(p.Letters); i++ {
 			var weight int
 			if i == 0 && p.Letters[i] == r2 {
-				//r1 matches any in case of the first letter
+				//r1 matches any in case the first letter
 				weight = p.Weights[0]
 			} else if i == len(p.Letters)-1 && p.Letters[i] == r1 {
-				//r2 matches any in case of the first letter
+				//r2 matches any in case the last letter
 				weight = p.Weights[i+1]
 			} else if p.Letters[i] == r1 && p.Letters[i+1] == r2 {
 				weight = p.Weights[i+1]
@@ -76,7 +78,7 @@ func weightedWordPattern(ps []Pattern, s string) Pattern {
 	return wp
 }
 
-func hyphenated(pl *PatternLookup, s string) []string {
+func hyphenated_wrong(pl *PatternLookup, s string) []string {
 	s = "." + s + "."
 	ps := matchingPatterns(pl, s)
 	sl := []string{}
@@ -100,5 +102,41 @@ func hyphenated(pl *PatternLookup, s string) []string {
 	if curr != "" {
 		sl = append(sl, curr)
 	}
+	return sl
+}
+
+func Hyphenated(pl *PatternLookup, s string) []string {
+	if len(s) < 3 {
+		//don't hyphenate words with less than 3 runes
+		return []string{s}
+	}
+	rs := []rune("." + strings.ToLower(s) + ".")
+	ws := make([]int, len(rs)+1)
+	for subSize := 1; subSize <= len(rs); subSize++ {
+		for i := 0; i < len(rs)-subSize+1; i++ {
+			sub := rs[i : i+subSize]
+			pattern, ok := pl.Find(string(sub))
+			if !ok {
+				continue
+			}
+			for iw, w := range pattern.Weights {
+				if w > ws[i+iw] {
+					ws[i+iw] = w
+				}
+			}
+		}
+	}
+
+	sl := []string{}
+	var last int
+	//skip first and last for the dots (.).
+	//skip next to first and prev. to last for start and end of word
+	for i, w := range ws[2 : len(ws)-2] {
+		if w%2 == 1 {
+			sl = append(sl, s[last:i+1])
+			last = i + 1
+		}
+	}
+	sl = append(sl, s[last:])
 	return sl
 }
