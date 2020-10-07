@@ -49,3 +49,16 @@ func TestHyhenation(t *testing.T) {
 	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 }
+
+func TestLatinHyhenation(t *testing.T) {
+	buf := bytes.NewBufferString(latinPatterns)
+	pl, err := parsePatterns(buf)
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+
+	s := "Lorem"
+	t0 := time.Now()
+	hsl := Hyphenated(pl, s)
+	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+}

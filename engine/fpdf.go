@@ -161,7 +161,7 @@ func (e *FPDF) ChangeFont(fnt style.Font) {
 func (e *FPDF) PrintableArea() (x0, y0, x1, y1 float64) {
 	l, t, r, b := e.pdf.GetMargins()
 	pw, ph := e.pdf.GetPageSize()
-	return l, t, pw - r - 1, ph - b
+	return l, t, pw - r - 2, ph - b
 }
 
 func (e *FPDF) PageHeight() float64 {

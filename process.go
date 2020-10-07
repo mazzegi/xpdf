@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/mazzegi/xpdf/engine"
+	"github.com/mazzegi/xpdf/hyphenation"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/xdoc"
 )
@@ -14,11 +15,13 @@ type Processor struct {
 	engine     engine.Engine
 	doc        *xdoc.Document
 	currStyles style.Styles
+	hyphenator *hyphenation.PatternLookup
 }
 
-func NewProcessor(engine engine.Engine, doc *xdoc.Document) *Processor {
+func NewProcessor(engine engine.Engine, hyphenator *hyphenation.PatternLookup, doc *xdoc.Document) *Processor {
 	p := &Processor{
 		engine:     engine,
+		hyphenator: hyphenator,
 		doc:        doc,
 		currStyles: DefaultStyle(),
 	}

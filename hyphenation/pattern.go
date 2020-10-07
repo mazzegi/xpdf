@@ -26,6 +26,10 @@ func NewPatternLookup() *PatternLookup {
 	}
 }
 
+func LoadPatternLookup(r io.Reader) (*PatternLookup, error) {
+	return parsePatterns(r)
+}
+
 func (pl *PatternLookup) Find(key string) (Pattern, bool) {
 	p, ok := pl.patterns[key]
 	return p, ok

@@ -1,5 +1,13 @@
 package hyphenation
 
+import "bytes"
+
+func NewEnUsLookup() *PatternLookup {
+	buf := bytes.NewBufferString(enUsPatterns)
+	pl, _ := LoadPatternLookup(buf)
+	return pl
+}
+
 var enUsPatterns = `
 .ach4
 .ad4der

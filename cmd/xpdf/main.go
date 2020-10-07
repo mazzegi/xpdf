@@ -9,6 +9,7 @@ import (
 	"github.com/mazzegi/xpdf"
 	"github.com/mazzegi/xpdf/engine"
 	"github.com/mazzegi/xpdf/font"
+	"github.com/mazzegi/xpdf/hyphenation"
 	"github.com/mazzegi/xpdf/xdoc"
 )
 
@@ -87,7 +88,8 @@ func main() {
 		os.Exit(3)
 	}
 
-	p := xpdf.NewProcessor(engine, doc)
+	hyphenator := hyphenation.NewLatinLookup()
+	p := xpdf.NewProcessor(engine, hyphenator, doc)
 	err = p.Process(outF)
 	if err != nil {
 		fmt.Println("ERROR processing input:", err)
