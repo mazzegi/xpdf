@@ -29,22 +29,36 @@ func TestHyhenation(t *testing.T) {
 		t.Fatalf("parse: %v", err)
 	}
 
-	s := "hyphenation"
-	t0 := time.Now()
-	hsl := Hyphenated(pl, s)
-	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+	var s string
+	var hsl []string
+	var t0 time.Time
 
-	s = "concatenation"
-	t0 = time.Now()
-	hsl = Hyphenated(pl, s)
-	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+	// s = "hyphenation"
+	// t0 = time.Now()
+	// hsl = Hyphenated(pl, s)
+	// t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 
-	s = "supercalifragilisticexpialidocious"
-	t0 = time.Now()
-	hsl = Hyphenated(pl, s)
-	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+	// s = "concatenation"
+	// t0 = time.Now()
+	// hsl = Hyphenated(pl, s)
+	// t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 
-	s = "Developer"
+	// s = "supercalifragilisticexpialidocious"
+	// t0 = time.Now()
+	// hsl = Hyphenated(pl, s)
+	// t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+
+	// s = "Developer"
+	// t0 = time.Now()
+	// hsl = Hyphenated(pl, s)
+	// t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+
+	// s = "sportsman"
+	// t0 = time.Now()
+	// hsl = Hyphenated(pl, s)
+	// t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+
+	s = "small"
 	t0 = time.Now()
 	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
