@@ -68,7 +68,7 @@ default-box{
         <lf lines="1"/>
         <setx x="110"/>
         <sety y="30"/>
-        <box style="line-spacing: 1.5; width: 69; h-align: center; padding: 4,4,4,4; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
+        <box style="line-spacing: 1.5; width: 69; h-align: block; padding: 4,4,4,4; line-width: 0.1; text-color: #000000; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
             Num Lorem `__ipsum__ non \ muso` dolor minor. Set stupidate sin causa extrema est. Populi sunt omnes kretesse coum enulli.
             Claustro etiam numbat decesse claustro
         </box>

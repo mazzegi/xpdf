@@ -252,7 +252,9 @@ func (p *Processor) assignCellMinHeight(cell *tableCell) {
 		availableWidth += sc.width
 	}
 	availableWidth -= cell.Padding.Left + cell.Padding.Right
-	textHeight := p.textHeight(cell.text, availableWidth, cell.Styles)
+
+	textHeight := p.textHeightFnc(cell.Styles)(cell.text, availableWidth, cell.Styles)
+
 	cellHeight := textHeight + cell.Padding.Top + cell.Padding.Bottom
 
 	// if cell spans rows, divide height to spanned cells
@@ -388,7 +390,8 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 			p.engine.SetY(paddedPa.y0)
 		}
 		p.engine.SetX(paddedPa.x0)
-		p.writeText(cell.text, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
+
+		p.writeTextFnc(cell.Styles)(cell.text, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
 	}
 
 	for _, is := range cell.iss {

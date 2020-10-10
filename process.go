@@ -111,12 +111,7 @@ func (p *Processor) renderText(text *xdoc.Text) {
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	width := p.page().EffectiveWidth(sty.Width)
 
-	switch sty.HAlign {
-	case style.HAlignBlock:
-		p.writeTextHyphenated(text.Text, width, sty)
-	default:
-		p.writeText(text.Text, width, sty)
-	}
+	p.writeTextFnc(sty)(text.Text, width, sty)
 }
 
 func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
@@ -128,7 +123,7 @@ func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
 		if box.Text == "" {
 			height = p.engine.FontHeight()
 		} else {
-			height = p.textHeight(box.Text, width, sty)
+			height = p.textHeightFnc(sty)(box.Text, width, sty)
 		}
 	} else {
 		height = sty.Dimension.Height
@@ -144,7 +139,7 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	var height float64
 	if sty.Dimension.Height <= 0 {
 		if box.Text != "" {
-			height = p.textHeight(box.Text, width, sty)
+			height = p.textHeightFnc(sty)(box.Text, width, sty)
 		} else {
 			height = p.engine.FontHeight()
 		}
@@ -169,7 +164,7 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	p.engine.SetY(y0 + sty.Box.Padding.Top)
 	p.engine.SetX(x0 + sty.Box.Padding.Left)
 	if box.Text != "" {
-		p.writeText(box.Text, width, sty)
+		p.writeTextFnc(sty)(box.Text, width, sty)
 	}
 	p.engine.SetY(y1)
 }
@@ -184,4 +179,23 @@ func (p *Processor) renderImage(img *xdoc.Image, pa PrintableArea) {
 		width, height = pa.Width(), pa.Height()
 	}
 	p.engine.PutImage(img.Source, x, y, width, height)
+}
+
+//
+func (p *Processor) textHeightFnc(sty style.Styles) func(string, float64, style.Styles) float64 {
+	switch sty.HAlign {
+	case style.HAlignBlock:
+		return p.textHeightHyphenated
+	default:
+		return p.textHeight
+	}
+}
+
+func (p *Processor) writeTextFnc(sty style.Styles) func(string, float64, style.Styles) {
+	switch sty.HAlign {
+	case style.HAlignBlock:
+		return p.writeTextHyphenated
+	default:
+		return p.writeText
+	}
 }
