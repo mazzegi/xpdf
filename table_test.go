@@ -9,9 +9,11 @@ import (
 func TestTableSpans(t *testing.T) {
 	cell := func(colSpan, rowSpan int) *tableCell {
 		sty := style.Styles{}
-		sty.ColumnSpan = colSpan
-		sty.RowSpan = rowSpan
-		return &tableCell{Styles: sty}
+		return &tableCell{
+			Styles:  sty,
+			colSpan: colSpan,
+			rowSpan: rowSpan,
+		}
 	}
 	desc := "some col spans"
 	tab := &table{

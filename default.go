@@ -25,8 +25,6 @@ func DefaultStyle() style.Styles {
 		},
 		Table: style.Table{
 			ColumnWidth: -1,
-			ColumnSpan:  1,
-			RowSpan:     1,
 		},
 		Align: style.Align{
 			HAlign: style.HAlignLeft,

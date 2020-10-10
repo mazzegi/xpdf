@@ -3,6 +3,7 @@ package xdoc
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"strings"
 
 	"github.com/mazzegi/xpdf/style"
@@ -163,7 +164,7 @@ func (desc *Description) describeTableRow(tr *TableRow) []DescribeItem {
 
 func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 	i := DescribeItem{
-		Name:       "table-cell",
+		Name:       fmt.Sprintf("table-cell colspan=%d rowspan=%d", td.ColSpan, td.RowSpan),
 		StyleDiffs: desc.describeMutator(td),
 		Value:      clearStr(td.Content),
 	}

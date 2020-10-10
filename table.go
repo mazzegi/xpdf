@@ -24,11 +24,11 @@ func dumpRowSpans(row *tableRow) string {
 		} else if cell.spannedBy != nil {
 			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-byspn:%d:%d]", cell.rowIdx, cell.cellIdx, cell.spannedBy.rowIdx, cell.spannedBy.cellIdx))
 		} else if len(cell.spansCols) > 0 && len(cell.spansRows) > 0 {
-			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-spans:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-spans:%d:%d]", cell.rowIdx, cell.cellIdx, cell.colSpan, cell.rowSpan))
 		} else if len(cell.spansCols) > 0 {
-			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-colsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-colsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.colSpan, cell.rowSpan))
 		} else if len(cell.spansRows) > 0 {
-			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-rowsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.ColumnSpan, cell.RowSpan))
+			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-rowsp:%d:%d]", cell.rowIdx, cell.cellIdx, cell.colSpan, cell.rowSpan))
 		} else {
 			cellsl = append(cellsl, fmt.Sprintf("[%d:%d-regl-cell]", cell.rowIdx, cell.cellIdx))
 		}
@@ -87,7 +87,8 @@ type tableCell struct {
 	iss  []xdoc.Instruction
 
 	// auxiliary parameters
-	//TODO: replace colspan/rowspan styles by corresponding attrs
+	colSpan   int
+	rowSpan   int
 	rowIdx    int
 	cellIdx   int
 	minHeight float64
@@ -175,14 +176,14 @@ func (t *table) processColumnSpans() {
 		newCells := []*tableCell{}
 		for _, cell := range row.cells {
 			newCells = append(newCells, cell)
-			if cell.ColumnSpan <= 1 {
+			if cell.colSpan <= 1 {
 				continue
 			}
-			for s := 0; s < cell.ColumnSpan-1; s++ {
+			for s := 0; s < cell.colSpan-1; s++ {
 				spannedCell := &tableCell{
 					spannedBy: cell,
 				}
-				spannedCell.RowSpan = cell.RowSpan
+				spannedCell.rowSpan = cell.rowSpan
 				newCells = append(newCells, spannedCell)
 				cell.spansCols = append(cell.spansCols, spannedCell)
 			}
@@ -194,14 +195,14 @@ func (t *table) processColumnSpans() {
 func (t *table) processRowSpans() {
 	for ir, row := range t.rows {
 		for ic, cell := range row.cells {
-			if cell.RowSpan <= 1 {
+			if cell.rowSpan <= 1 {
 				continue
 			}
 			if cell.spannedBy != nil || cell.zero {
 				continue
 			}
 			//insert spanned cell in following rows
-			for n := 0; n < cell.RowSpan-1; n++ {
+			for n := 0; n < cell.rowSpan-1; n++ {
 				spannedRowIdx := ir + 1 + n
 
 				var spannedRow *tableRow
@@ -317,9 +318,11 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 				cellSty = xcell.MutatedStyles(p.doc.StyleClasses(), row.Styles)
 			}
 			cell := &tableCell{
-				Styles: cellSty,
-				text:   xcell.Content,
-				iss:    xcell.Instructions,
+				Styles:  cellSty,
+				colSpan: xcell.ColSpan,
+				rowSpan: xcell.RowSpan,
+				text:    xcell.Content,
+				iss:     xcell.Instructions,
 			}
 
 			row.cells = append(row.cells, cell)
@@ -341,11 +344,8 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	if tab.columnCount == 0 {
 		return
 	}
-	// Logf("table-spans:\n%s", dumpTableSpans(tab))
-	// Logf("table-dims:\n%s", dumpTableDims(tab))
 
 	//TODO: add a "repeat first row on page-break" option
-	//TODO: refine measures (boxes and margins)
 	page := p.page()
 	x0, y := p.engine.GetXY()
 	for _, row := range tab.rows {

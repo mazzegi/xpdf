@@ -56,7 +56,7 @@
     </footer>
 
     <body>
-        <sety y="190"/>
+        <!-- <sety y="190"/> -->
         <table class="default-table">
             <tr class="table-header align-center">
                 <td>__Number__</td>
@@ -66,19 +66,19 @@
             </tr>
             <tr>
                 <td>__1__: c4 e4; kf3 c6</td>
-                <td class="align-right" style="column-span: 2;">laoreet dolore magna aliquam</td>
+                <td colspan="2" class="align-right">laoreet dolore magna aliquam</td>
                 <!-- <td>quam nautilus</td> -->
                 <td>sed igitur</td>
             </tr>
             <tr>
                 <td>__2__: c4 e4; kf3 c6</td>
-                <td class="align-right" style="h-align: block;">When chaotic vixens try to visualize dramatic coincidences, situations tend to be more ridicolous.</td>
+                <td class="align-right">When chaotic vixens try to visualize dramatic coincidences, situations tend to be more ridicolous.</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
             <tr>
                 <td>__3__: c4 e4; kf3 c6</td>
-                <td class="align-right" style="row-span: 2;">laoreet dolore magna aliquam confidate ora plus equipio</td>
+                <td rowspan="2" class="align-right">laoreet dolore magna aliquam confidate ora plus equipio</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
@@ -91,7 +91,7 @@
             <tr>
                 <td>__5__: c4 e4; kf3 c6</td>
                 <td>laoreet dolore magna aliquam</td>
-                <td class="align-center" style="v-align: middle; row-span: 2; column-span: 2;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
+                <td colspan="2" rowspan="2" class="align-center" style="v-align: middle;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
                 <!--<td>sed igitur</td>-->
             </tr>
             <tr>
@@ -103,7 +103,7 @@
             <tr>
                 <td>__7__: c4 e4; kf3 c6</td>
                 <td>laoreet dolore magna aliquam</td>
-                <td style="row-span: 2;">quam nautilus</td>
+                <td rowspan="2">quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
             <tr>

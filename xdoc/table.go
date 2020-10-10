@@ -1,6 +1,9 @@
 package xdoc
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"strconv"
+)
 
 type Table struct {
 	Styled
@@ -18,7 +21,29 @@ type TableCell struct {
 	Styled
 	XMLName      xml.Name `xml:"td"`
 	Content      string   `xml:",chardata"`
+	ColSpan      int      `xml:"colspan,attr"`
+	RowSpan      int      `xml:"rowspan,attr"`
 	Instructions []Instruction
+}
+
+func (c *TableCell) DecodeAttrs(attrs []xml.Attr) error {
+	for _, a := range attrs {
+		switch a.Name.Local {
+		case "colspan":
+			n, err := strconv.ParseInt(a.Value, 10, 64)
+			if err != nil {
+				return err
+			}
+			c.ColSpan = int(n)
+		case "rowspan":
+			n, err := strconv.ParseInt(a.Value, 10, 64)
+			if err != nil {
+				return err
+			}
+			c.RowSpan = int(n)
+		}
+	}
+	return c.Styled.DecodeAttrs(attrs)
 }
 
 func (tab *Table) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
