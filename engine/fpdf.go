@@ -57,6 +57,7 @@ func fpdfFontStyle(fnt style.Font) string {
 
 type FPDF struct {
 	pdf              *gofpdf.Fpdf
+	monoFont         string
 	translateUnicode func(s string) string
 }
 
@@ -84,6 +85,11 @@ func NewFPDF(fonts *font.Registry, doc *xdoc.Document) (*FPDF, error) {
 }
 
 func (e *FPDF) initFonts(fonts *font.Registry) error {
+	if fonts.MonoFont() != "" {
+		e.monoFont = fonts.MonoFont()
+	} else {
+		e.monoFont = "Courier"
+	}
 	return fonts.Each(func(fd font.Descriptor) error {
 		bs, err := ioutil.ReadFile(fd.FilePath)
 		if err != nil {
@@ -180,6 +186,10 @@ func (e *FPDF) PutImage(src string, x, y, width, height float64) {
 
 func (e *FPDF) SetTextColor(r, g, b int) {
 	e.pdf.SetTextColor(r, g, b)
+}
+
+func (e *FPDF) MonoFont() string {
+	return e.monoFont
 }
 
 func (e *FPDF) FontHeight() float64 {

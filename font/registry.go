@@ -6,7 +6,7 @@ const (
 	Regular    Style = "regular"
 	Bold       Style = "bold"
 	Italic     Style = "italic"
-	BoldItalic Style = "bold/italic"
+	BoldItalic Style = "bold+italic"
 )
 
 type Descriptor struct {
@@ -16,7 +16,8 @@ type Descriptor struct {
 }
 
 type Registry struct {
-	fonts []Descriptor
+	monoFont string
+	fonts    []Descriptor
 }
 
 func NewRegistry() *Registry {
@@ -25,6 +26,10 @@ func NewRegistry() *Registry {
 
 func (d *Registry) Register(fd Descriptor) {
 	d.fonts = append(d.fonts, fd)
+}
+
+func (d *Registry) MonoFont() string {
+	return d.monoFont
 }
 
 func (d *Registry) Each(do func(fd Descriptor) error) error {

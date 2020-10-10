@@ -25,6 +25,7 @@ type Engine interface {
 	PutImage(src string, x, y, width, height float64)
 	SetTextColor(r, g, b int)
 	FontHeight() float64
+	MonoFont() string
 	TextWidth(s string) float64
 	WriteText(s string)
 	Margins() (left, top, right, bottom float64)

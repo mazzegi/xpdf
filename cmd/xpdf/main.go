@@ -20,8 +20,8 @@ func main() {
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
 		//in = "../../examples/table1.xml"
-		//in = "../../examples/doc1.xml"
-		in = "../../examples/hyphen.xml"
+		in = "../../examples/doc1.xml"
+		//in = "../../examples/hyphen.xml"
 	} else {
 		in = os.Args[1]
 	}
@@ -46,47 +46,11 @@ func main() {
 	}
 	defer outF.Close()
 
-	fonts := font.NewRegistry()
-	fonts.Register(font.Descriptor{
-		Name:     "chin",
-		Style:    font.Regular,
-		FilePath: "fonts/DroidSansFallback.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu",
-		Style:    font.Regular,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu",
-		Style:    font.Bold,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu",
-		Style:    font.Italic,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu-serif",
-		Style:    font.Regular,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu-serif",
-		Style:    font.Bold,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "dejavu-serif",
-		Style:    font.Italic,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
-	})
-	fonts.Register(font.Descriptor{
-		Name:     "tex",
-		Style:    font.Regular,
-		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuMathTeXGyre.ttf",
-	})
+	fonts, err := font.LoadRegistryFromFile("fonts/fontdef.toml")
+	if err != nil {
+		fmt.Printf("ERROR loading font-def: %v\n", err)
+		os.Exit(2)
+	}
 
 	engine, err := engine.NewFPDF(fonts, doc)
 	if err != nil {

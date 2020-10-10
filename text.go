@@ -15,7 +15,7 @@ func (p *Processor) setMarkupFont(textStyles markup.TextStyle, baseFont style.Fo
 		fnt.Weight = style.FontWeightBold
 	}
 	if textStyles.Mono {
-		fnt.Family = "Courier"
+		fnt.Family = p.engine.MonoFont()
 	}
 	p.engine.ChangeFont(fnt)
 }
