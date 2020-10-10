@@ -62,6 +62,11 @@ func TestHyhenation(t *testing.T) {
 	t0 = time.Now()
 	hsl = Hyphenated(pl, s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
+
+	s = "sportsman"
+	t0 = time.Now()
+	hsl = Hyphenated(pl, s)
+	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 }
 
 func TestLatinHyhenation(t *testing.T) {

@@ -6,6 +6,7 @@ const (
 	HAlignLeft   HAlign = "left"
 	HAlignRight  HAlign = "right"
 	HAlignCenter HAlign = "center"
+	HAlignBlock  HAlign = "block"
 )
 
 type VAlign string

@@ -1,9 +1,6 @@
 package xpdf
 
 import (
-	"strings"
-
-	"github.com/mazzegi/xpdf/hyphenation"
 	"github.com/mazzegi/xpdf/markup"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/text"
@@ -24,31 +21,16 @@ func (p *Processor) setMarkupFont(textStyles markup.TextStyle, baseFont style.Fo
 }
 
 type textLine struct {
-	items []*markup.TextItem
-	width float64
+	items         []*markup.TextItem
+	width         float64
+	pureTextWidth float64
+	paragraph     bool
 }
 
 func (p *Processor) textLines(s string, width float64, baseFont style.Font) []textLine {
 	s = p.tr(s)
 	s = text.WhitespaceRectified(s)
 	items := markup.Parse(s).Words()
-
-	tryHyphenate := func(s string, currWidth float64) (s1 string, s2 string, success bool) {
-		success = false
-		availWidth := width - currWidth
-		parts := hyphenation.Hyphenated(p.hyphenator, s)
-		for i := len(parts) - 2; i >= 0; i-- {
-			trial := " " + strings.Join(parts[:i+1], "") + "-"
-			trialWidth := p.engine.TextWidth(trial)
-			if trialWidth <= availWidth {
-				s1 = trial
-				s2 = strings.Join(parts[i+1:], "")
-				success = true
-				return
-			}
-		}
-		return
-	}
 
 	lines := []textLine{}
 	curr := textLine{}
@@ -66,23 +48,8 @@ func (p *Processor) textLines(s string, width float64, baseFont style.Font) []te
 		p.setMarkupFont(textItem.Style, baseFont)
 		itemWidth := p.engine.TextWidth(" " + textItem.Text)
 		if curr.width+itemWidth >= width {
-			//try hyphenation
-			s1, s2, ok := tryHyphenate(textItem.Text, curr.width)
-			if !ok {
-				lines = append(lines, curr)
-				curr = textLine{}
-			} else {
-				curr.items = append(curr.items, &markup.TextItem{
-					Text:  s1,
-					Style: textItem.Style,
-				})
-				curr.width += p.engine.TextWidth(s1)
-				lines = append(lines, curr)
-
-				curr = textLine{}
-				textItem.Text = s2
-				itemWidth = p.engine.TextWidth(s2)
-			}
+			lines = append(lines, curr)
+			curr = textLine{}
 		}
 
 		if len(curr.items) > 0 {

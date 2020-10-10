@@ -32,10 +32,16 @@ func Hyphenated(pl *PatternLookup, s string) []string {
 	//skip next to first and prev. to last for start and end of word
 	for i, w := range ws[2 : len(ws)-2] {
 		if w%2 == 1 {
-			sl = append(sl, s[last:i+1])
-			last = i + 1
+			part := s[last : i+1]
+			if len(part) > 1 {
+				sl = append(sl, part)
+				last = i + 1
+			}
 		}
 	}
-	sl = append(sl, s[last:])
+	part := s[last:]
+	if len(part) > 1 {
+		sl = append(sl, part)
+	}
 	return sl
 }

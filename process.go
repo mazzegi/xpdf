@@ -110,7 +110,13 @@ func (p *Processor) renderText(text *xdoc.Text) {
 	defer p.resetStyles()
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	width := p.page().EffectiveWidth(sty.Width)
-	p.writeText(text.Text, width, sty)
+
+	switch sty.HAlign {
+	case style.HAlignBlock:
+		p.writeTextHyphenated(text.Text, width, sty)
+	default:
+		p.writeText(text.Text, width, sty)
+	}
 }
 
 func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {

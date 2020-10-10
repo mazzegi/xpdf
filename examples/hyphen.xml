@@ -28,6 +28,10 @@ times{
     font-point-size: 12;
     font-style: normal;
 }
+
+block{
+    h-align: block;
+}
     </style>
 
     <header>
@@ -37,11 +41,13 @@ times{
     </footer>
 
     <body>
-        <text class="times">
+        <text class="times block">
         Folly words widow one downs few age every seven. If miss part by fact he park just shew. Discovered had get considered projection who favourable.
         Necessary up knowledge it tolerably. Unwilling departure education is be dashwoods or an. Use off agreeable law unwilling sir deficient curiosity instantly.
         Easy mind life fact with see has bore ten. Parish any chatty can elinor direct for former. Up as meant widow equal an share least.
-        Made last it seen went no just when of by. Occasional entreaties comparison me difficulty so themselves.
+        Made last it seen went no just when of by. Occasional entreaties comparison me difficulty so themselves.\
+        Well\
+        \
         At brother inquiry of offices without do my service. As particular to companions at sentiments. 
         Weather however luckily enquire so certain do. Aware did stood was day under ask. Dearest affixed enquire on explain opinion he. 
         Reached who the mrs joy offices pleased. Towards did colonel article any parties. Article nor prepare chicken you him now. 
@@ -68,7 +74,7 @@ times{
         So direction so sweetness or extremity at daughters. Provided put unpacked now but bringing. Parish so enable innate in formed missed. 
         Hand two was eat busy fail. Stand smart grave would in so. Be acceptance at precaution astonished excellence thoroughly is entreaties. 
         Who decisively attachment has dispatched. Fruit defer in party me built under first. Forbade him but savings sending ham general. 
-        So play do in near park that pain.         
+        So play do in near park that pain.\       
         </text>
 
     </body>
