@@ -60,7 +60,7 @@ type FPDF struct {
 	translateUnicode func(s string) string
 }
 
-func NewFPDF(fonts *font.Directory, doc *xdoc.Document) (*FPDF, error) {
+func NewFPDF(fonts *font.Registry, doc *xdoc.Document) (*FPDF, error) {
 	e := &FPDF{
 		pdf: gofpdf.New(
 			fpdfOrientation(doc.Page.Orientation),
@@ -83,7 +83,7 @@ func NewFPDF(fonts *font.Directory, doc *xdoc.Document) (*FPDF, error) {
 	return e, nil
 }
 
-func (e *FPDF) initFonts(fonts *font.Directory) error {
+func (e *FPDF) initFonts(fonts *font.Registry) error {
 	return fonts.Each(func(fd font.Descriptor) error {
 		bs, err := ioutil.ReadFile(fd.FilePath)
 		if err != nil {

@@ -349,7 +349,7 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	page := p.page()
 	x0, y := p.engine.GetXY()
 	for _, row := range tab.rows {
-		if y+row.maxCellHeight() > page.printableArea.y1 {
+		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
 		}

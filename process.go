@@ -12,10 +12,11 @@ import (
 )
 
 type Processor struct {
-	engine     engine.Engine
-	doc        *xdoc.Document
-	currStyles style.Styles
-	hyphenator *hyphenation.PatternLookup
+	engine           engine.Engine
+	doc              *xdoc.Document
+	currStyles       style.Styles
+	hyphenator       *hyphenation.PatternLookup
+	preventPageBreak bool
 }
 
 func NewProcessor(engine engine.Engine, hyphenator *hyphenation.PatternLookup, doc *xdoc.Document) *Processor {
@@ -32,9 +33,23 @@ func (p *Processor) Process(w io.Writer) error {
 	//TODO: make page-count and current-page aliases options
 	p.engine.SetPageCountAlias("{np}")
 	p.engine.OnHeader(func() {
+		x, y := p.engine.GetXY()
+		p.preventPageBreak = true
+		defer func() {
+			p.engine.SetX(x)
+			p.engine.SetY(y)
+			p.preventPageBreak = false
+		}()
 		p.processInstructions(p.doc.Header)
 	})
 	p.engine.OnFooter(func() {
+		x, y := p.engine.GetXY()
+		p.preventPageBreak = true
+		defer func() {
+			p.engine.SetX(x)
+			p.engine.SetY(y)
+			p.preventPageBreak = false
+		}()
 		p.processInstructions(p.doc.Footer)
 	})
 
@@ -150,7 +165,7 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	x0, y0 := p.engine.GetXY()
 	_, _, _, bm := p.engine.Margins()
 	effHeight := p.engine.PageHeight() - bm
-	if y0+height >= effHeight {
+	if !p.preventPageBreak && y0+height >= effHeight {
 		p.engine.AddPage()
 		x0, y0 = p.engine.GetXY()
 	}

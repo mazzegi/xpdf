@@ -20,8 +20,8 @@ func main() {
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
 		//in = "../../examples/table1.xml"
-		in = "../../examples/doc1.xml"
-		//in = "../../examples/hyphen.xml"
+		//in = "../../examples/doc1.xml"
+		in = "../../examples/hyphen.xml"
 	} else {
 		in = os.Args[1]
 	}
@@ -46,7 +46,7 @@ func main() {
 	}
 	defer outF.Close()
 
-	fonts := font.NewDirectory()
+	fonts := font.NewRegistry()
 	fonts.Register(font.Descriptor{
 		Name:     "chin",
 		Style:    font.Regular,
@@ -81,6 +81,11 @@ func main() {
 		Name:     "dejavu-serif",
 		Style:    font.Italic,
 		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+	})
+	fonts.Register(font.Descriptor{
+		Name:     "tex",
+		Style:    font.Regular,
+		FilePath: "/usr/share/fonts/truetype/dejavu/DejaVuMathTeXGyre.ttf",
 	})
 
 	engine, err := engine.NewFPDF(fonts, doc)

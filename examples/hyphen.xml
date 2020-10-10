@@ -32,12 +32,34 @@ times{
 block{
     h-align: block;
 }
+
+header{
+    padding: 5,5,5,5; 
+    line-width: 0.2;    
+    border: 0,0,0,1;
+    h-align: right;
+}
+
+footer{
+    padding: 5,5,5,5; 
+    line-width: 0.2;    
+    border: 0,1,0,0;
+    h-align: center;
+}
     </style>
 
     <header>
+        <sety y="3"/>
+        <box class="header times">
+            {cp} / {np} Here goes the Header
+        </box>
     </header>
 
     <footer>
+        <sety y="-15"/>
+        <box class="times footer">
+            Here goes the Footer
+        </box>
     </footer>
 
     <body>

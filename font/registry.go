@@ -15,19 +15,19 @@ type Descriptor struct {
 	FilePath string
 }
 
-type Directory struct {
+type Registry struct {
 	fonts []Descriptor
 }
 
-func NewDirectory() *Directory {
-	return &Directory{}
+func NewRegistry() *Registry {
+	return &Registry{}
 }
 
-func (d *Directory) Register(fd Descriptor) {
+func (d *Registry) Register(fd Descriptor) {
 	d.fonts = append(d.fonts, fd)
 }
 
-func (d *Directory) Each(do func(fd Descriptor) error) error {
+func (d *Registry) Each(do func(fd Descriptor) error) error {
 	for _, fd := range d.fonts {
 		err := do(fd)
 		if err != nil {
