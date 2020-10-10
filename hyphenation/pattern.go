@@ -11,31 +11,31 @@ import (
 	"github.com/pkg/errors"
 )
 
-type Pattern struct {
+type pattern struct {
 	Letters []rune
 	Weights []int
 }
 
-type PatternLookup struct {
-	patterns map[string]Pattern
+type patternLookup struct {
+	patterns map[string]pattern
 }
 
-func NewPatternLookup() *PatternLookup {
-	return &PatternLookup{
-		patterns: map[string]Pattern{},
+func newPatternLookup() *patternLookup {
+	return &patternLookup{
+		patterns: map[string]pattern{},
 	}
 }
 
-func LoadPatternLookup(r io.Reader) (*PatternLookup, error) {
+func loadPatternLookup(r io.Reader) (*patternLookup, error) {
 	return parsePatterns(r)
 }
 
-func (pl *PatternLookup) Find(key string) (Pattern, bool) {
+func (pl *patternLookup) find(key string) (pattern, bool) {
 	p, ok := pl.patterns[key]
 	return p, ok
 }
 
-func (p Pattern) String() string {
+func (p pattern) String() string {
 	var s string
 	for i := 0; i < len(p.Weights); i++ {
 		s += fmt.Sprintf("%d", p.Weights[i])
@@ -46,8 +46,8 @@ func (p Pattern) String() string {
 	return s
 }
 
-func parsePattern(s string) (Pattern, error) {
-	p := Pattern{}
+func parsePattern(s string) (pattern, error) {
+	p := pattern{}
 	wantDigit := true
 	for _, r := range s {
 		if wantDigit {
@@ -77,8 +77,8 @@ func parsePattern(s string) (Pattern, error) {
 	return p, nil
 }
 
-func parsePatterns(r io.Reader) (*PatternLookup, error) {
-	pl := NewPatternLookup()
+func parsePatterns(r io.Reader) (*patternLookup, error) {
+	pl := newPatternLookup()
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()

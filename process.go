@@ -15,11 +15,11 @@ type Processor struct {
 	engine           engine.Engine
 	doc              *xdoc.Document
 	currStyles       style.Styles
-	hyphenator       *hyphenation.PatternLookup
+	hyphenator       *hyphenation.Hyphenator
 	preventPageBreak bool
 }
 
-func NewProcessor(engine engine.Engine, hyphenator *hyphenation.PatternLookup, doc *xdoc.Document) *Processor {
+func NewProcessor(engine engine.Engine, hyphenator *hyphenation.Hyphenator, doc *xdoc.Document) *Processor {
 	p := &Processor{
 		engine:     engine,
 		hyphenator: hyphenator,

@@ -3,7 +3,6 @@ package xpdf
 import (
 	"strings"
 
-	"github.com/mazzegi/xpdf/hyphenation"
 	"github.com/mazzegi/xpdf/markup"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/text"
@@ -17,7 +16,7 @@ func (p *Processor) textLinesHyphenated(s string, width float64, baseFont style.
 	tryHyphenate := func(s string, currWidth float64) (s1 string, s2 string, success bool) {
 		success = false
 		availWidth := width - currWidth
-		parts := hyphenation.Hyphenated(p.hyphenator, s)
+		parts := p.hyphenator.Hyphenate(s)
 		for i := len(parts) - 2; i >= 0; i-- {
 			trial := " " + strings.Join(parts[:i+1], "") + "-"
 			trialWidth := p.engine.TextWidth(trial)

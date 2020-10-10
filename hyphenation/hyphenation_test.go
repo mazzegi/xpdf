@@ -1,7 +1,6 @@
 package hyphenation
 
 import (
-	"bytes"
 	"testing"
 	"time"
 )
@@ -23,11 +22,7 @@ func TestParse(t *testing.T) {
 }
 
 func TestHyhenation(t *testing.T) {
-	buf := bytes.NewBufferString(enUsPatterns)
-	pl, err := parsePatterns(buf)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
+	hyp := NewEnUs()
 
 	var s string
 	var hsl []string
@@ -60,24 +55,20 @@ func TestHyhenation(t *testing.T) {
 
 	s = "small"
 	t0 = time.Now()
-	hsl = Hyphenated(pl, s)
+	hsl = hyp.Hyphenate(s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 
 	s = "sportsman"
 	t0 = time.Now()
-	hsl = Hyphenated(pl, s)
+	hsl = hyp.Hyphenate(s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 }
 
 func TestLatinHyhenation(t *testing.T) {
-	buf := bytes.NewBufferString(latinPatterns)
-	pl, err := parsePatterns(buf)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
+	hyp := NewLatin()
 
 	s := "Lorem"
 	t0 := time.Now()
-	hsl := Hyphenated(pl, s)
+	hsl := hyp.Hyphenate(s)
 	t.Logf("hyph: %v (%s)", hsl, time.Since(t0))
 }

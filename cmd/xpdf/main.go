@@ -20,8 +20,8 @@ func main() {
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
 		//in = "../../examples/table1.xml"
-		in = "../../examples/doc1.xml"
-		//in = "../../examples/hyphen.xml"
+		//in = "../../examples/doc1.xml"
+		in = "../../examples/hyphen.xml"
 	} else {
 		in = os.Args[1]
 	}
@@ -59,8 +59,8 @@ func main() {
 	}
 
 	//hyphenator := hyphenation.NewLatinLookup()
-	hyphenator := hyphenation.NewEnUsLookup()
-	p := xpdf.NewProcessor(engine, hyphenator, doc)
+	hyp := hyphenation.NewEnUs()
+	p := xpdf.NewProcessor(engine, hyp, doc)
 	err = p.Process(outF)
 	if err != nil {
 		fmt.Println("ERROR processing input:", err)

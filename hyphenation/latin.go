@@ -2,11 +2,17 @@ package hyphenation
 
 import "bytes"
 
-func NewLatinLookup() *PatternLookup {
+func NewLatin() *Hyphenator {
 	buf := bytes.NewBufferString(latinPatterns)
-	pl, _ := LoadPatternLookup(buf)
-	return pl
+	pl, _ := loadPatternLookup(buf)
+	return new(pl)
 }
+
+// func NewLatinLookup() *PatternLookup {
+// 	buf := bytes.NewBufferString(latinPatterns)
+// 	pl, _ := LoadPatternLookup(buf)
+// 	return pl
+// }
 
 var latinPatterns = `
 .a2b3l

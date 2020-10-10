@@ -1,10 +1,41 @@
 package hyphenation
 
 import (
+	"io"
+	"os"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
-func Hyphenated(pl *PatternLookup, s string) []string {
+func LoadFromFile(file string) (*Hyphenator, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, errors.Wrapf(err, "open-file %q", file)
+	}
+	defer f.Close()
+	return Load(f)
+}
+
+func Load(r io.Reader) (*Hyphenator, error) {
+	pl, err := loadPatternLookup(r)
+	if err != nil {
+		return nil, errors.Wrap(err, "load-pattern-lookup")
+	}
+	return new(pl), nil
+}
+
+type Hyphenator struct {
+	lookup *patternLookup
+}
+
+func new(pl *patternLookup) *Hyphenator {
+	return &Hyphenator{
+		lookup: pl,
+	}
+}
+
+func (h *Hyphenator) Hyphenate(s string) []string {
 	if len(s) < 3 {
 		//don't hyphenate words with less than 3 runes
 		return []string{s}
@@ -14,7 +45,7 @@ func Hyphenated(pl *PatternLookup, s string) []string {
 	for subSize := 1; subSize <= len(rs); subSize++ {
 		for i := 0; i < len(rs)-subSize+1; i++ {
 			sub := rs[i : i+subSize]
-			pattern, ok := pl.Find(string(sub))
+			pattern, ok := h.lookup.find(string(sub))
 			if !ok {
 				continue
 			}
