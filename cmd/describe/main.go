@@ -14,14 +14,6 @@ func main() {
 	} else {
 		in = os.Args[1]
 	}
-	// var out string
-	// if len(os.Args) >= 3 {
-	// 	out = os.Args[2]
-	// } else {
-	// 	base := filepath.Base(in)
-	// 	ext := filepath.Ext(in)
-	// 	out = strings.TrimSuffix(base, ext) + ".pdf"
-	// }
 
 	doc, err := xdoc.LoadFromFile(in)
 	if err != nil {

@@ -63,7 +63,11 @@ func (p *Processor) Process(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	return p.engine.WritePDF(w)
+	err = p.engine.WritePDF(w)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *Processor) tr(s string) string {

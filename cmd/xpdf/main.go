@@ -19,9 +19,9 @@ func main() {
 		// fmt.Println("usage: xpdf <in> <optional:out>")
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
-		in = "../../examples/table1.xml"
+		//in = "../../examples/table1.xml"
 		//in = "../../examples/doc1.xml"
-		//in = "../../examples/hyphen.xml"
+		in = "../../examples/hyphen.xml"
 	} else {
 		in = os.Args[1]
 	}
@@ -58,7 +58,6 @@ func main() {
 		os.Exit(3)
 	}
 
-	//hyphenator := hyphenation.NewLatinLookup()
 	hyp := hyphenation.NewEnUs()
 	p := xpdf.NewProcessor(engine, hyp, doc)
 	err = p.Process(outF)
