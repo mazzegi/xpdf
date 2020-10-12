@@ -188,18 +188,6 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	p.engine.SetY(y1)
 }
 
-func (p *Processor) renderImage(img *xdoc.Image, pa PrintableArea) {
-	sty := img.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
-	x, y := p.engine.GetXY()
-	x += sty.Dimension.OffsetX
-	y += sty.Dimension.OffsetY
-	width, height := sty.Width, sty.Height
-	if width <= 0 || height <= 0 || width > pa.Width() || height > pa.Height() {
-		width, height = pa.Width(), pa.Height()
-	}
-	p.engine.PutImage(img.Source, x, y, width, height)
-}
-
 //
 func (p *Processor) textHeightFnc(sty style.Styles) func(string, float64, style.Styles) float64 {
 	switch sty.HAlign {

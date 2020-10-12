@@ -117,7 +117,7 @@
             </tr>
             <tr>
                 <td>__10__: c4 e4; kf3 c6</td>
-                <td style="height: 14;">
+                <td >
                     <!-- <image style="width: 10; height: 10;">virus.png</image> -->
                     <image>virus.png</image>
                     <!-- <image style="offset-x: 12; width: 10; height: 10;">virus.png</image> -->
@@ -152,6 +152,7 @@
 
         <lf lines="1"/>
         <text>Sic!</text>
-        <image style="width: 10; height: 10;">virus.png</image>
+        <!-- <image style="width: 10; height: 10;">virus.png</image> -->
+        <image>virus.png</image>
     </body>
 </document>
