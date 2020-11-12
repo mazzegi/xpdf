@@ -19,11 +19,11 @@ type TableRow struct {
 
 type TableCell struct {
 	Styled
-	XMLName      xml.Name `xml:"td"`
-	Content      string   `xml:",chardata"`
-	ColSpan      int      `xml:"colspan,attr"`
-	RowSpan      int      `xml:"rowspan,attr"`
-	Instructions []Instruction
+	XMLName xml.Name `xml:"td"`
+	Instructions
+	//Content string `xml:",chardata"`
+	ColSpan int `xml:"colspan,attr"`
+	RowSpan int `xml:"rowspan,attr"`
 }
 
 func (c *TableCell) DecodeAttrs(attrs []xml.Attr) error {
@@ -58,7 +58,7 @@ func (tab *Table) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				return nil
 			}
 		case xml.StartElement:
-			i, err := instructionRegistry.Decode(d, t)
+			i, err := registry.DecodeInstruction(d, t)
 			if err != nil {
 				return err
 			}
@@ -82,7 +82,7 @@ func (row *TableRow) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error 
 				return nil
 			}
 		case xml.StartElement:
-			i, err := instructionRegistry.Decode(d, t)
+			i, err := registry.DecodeInstruction(d, t)
 			if err != nil {
 				return err
 			}
@@ -106,13 +106,18 @@ func (cell *TableCell) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 				return nil
 			}
 		case xml.StartElement:
-			i, err := instructionRegistry.Decode(d, t)
+			i, err := registry.DecodeInstruction(d, t)
 			if err != nil {
 				continue
 			}
-			cell.Instructions = append(cell.Instructions, i)
+			cell.Instructions.ISS = append(cell.Instructions.ISS, i)
 		case xml.CharData:
-			cell.Content += string(t)
+			v := string(t)
+			if v != "" {
+				cell.Instructions.ISS = append(cell.Instructions.ISS, &TextBlock{
+					Text: string(t),
+				})
+			}
 		}
 	}
 }

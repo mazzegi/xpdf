@@ -34,11 +34,18 @@ func (is *Instructions) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 				return nil
 			}
 		case xml.StartElement:
-			i, err := instructionRegistry.Decode(d, t)
+			i, err := registry.DecodeInstruction(d, t)
 			if err != nil {
 				return errors.Wrapf(err, "decode token %v", token)
 			}
 			is.ISS = append(is.ISS, i)
+		case xml.CharData:
+			v := string(t)
+			if v != "" {
+				is.ISS = append(is.ISS, &TextBlock{
+					Text: string(t),
+				})
+			}
 		}
 	}
 }
@@ -69,13 +76,14 @@ type SetY struct {
 type Box struct {
 	Styled
 	XMLName xml.Name `xml:"box"`
-	Text    string   `xml:",chardata"`
+	//Text    string   `xml:",chardata"`
+	Instructions
 }
 
 type Text struct {
 	Styled
 	XMLName xml.Name `xml:"text"`
-	Text    string   `xml:",chardata"`
+	Instructions
 }
 
 type Image struct {

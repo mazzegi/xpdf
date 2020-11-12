@@ -166,13 +166,9 @@ func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 	i := DescribeItem{
 		Name:       fmt.Sprintf("table-cell colspan=%d rowspan=%d", td.ColSpan, td.RowSpan),
 		StyleDiffs: desc.describeMutator(td),
-		Value:      clearStr(td.Content),
+		//Value:      clearStr(td.Content),
 	}
-	if len(td.Instructions) > 0 {
-		i.Items = append(i.Items, desc.describeInstructions(Instructions{
-			ISS: td.Instructions,
-		})...)
-	}
+	i.Items = append(i.Items, desc.describeInstructions(td.Instructions)...)
 	return []DescribeItem{i}
 }
 
@@ -204,17 +200,35 @@ func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 				StyleDiffs: desc.describeMutator(is),
 			})
 		case *Box:
-			dis = append(dis, DescribeItem{
+			bi := DescribeItem{
 				Name:       "box",
-				Value:      clearStr(is.Text),
 				StyleDiffs: desc.describeMutator(is),
-			})
+			}
+			bi.Items = append(bi.Items, desc.describeInstructions(is.Instructions)...)
+			dis = append(dis, bi)
 		case *Text:
-			dis = append(dis, DescribeItem{
+			ti := DescribeItem{
 				Name:       "text",
+				StyleDiffs: desc.describeMutator(is),
+			}
+			ti.Items = append(ti.Items, desc.describeInstructions(is.Instructions)...)
+			dis = append(dis, ti)
+		case *Paragraph:
+			dis = append(dis, DescribeItem{
+				Name:       "paragraph",
 				Value:      clearStr(is.Text),
 				StyleDiffs: desc.describeMutator(is),
 			})
+		case *LineBreak:
+			dis = append(dis, DescribeItem{
+				Name: "line-break",
+			})
+		case *TextBlock:
+			dis = append(dis, DescribeItem{
+				Name:  "text-block",
+				Value: clearStr(is.Text),
+			})
+
 		case *Image:
 			dis = append(dis, DescribeItem{
 				Name:       "image",
@@ -227,6 +241,30 @@ func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 	}
 	return dis
 }
+
+// func (desc *Description) describeBlocks(bs Blocks) []DescribeItem {
+// 	dis := []DescribeItem{}
+// 	for _, b := range bs.BS {
+// 		switch b := b.(type) {
+// 		case *Paragraph:
+// 			dis = append(dis, DescribeItem{
+// 				Name:       "paragraph",
+// 				Value:      clearStr(b.Text),
+// 				StyleDiffs: desc.describeMutator(b),
+// 			})
+// 		case *LineBreak:
+// 			dis = append(dis, DescribeItem{
+// 				Name: "line-break",
+// 			})
+// 		case *TextBlock:
+// 			dis = append(dis, DescribeItem{
+// 				Name:  "text-block",
+// 				Value: clearStr(b.Text),
+// 			})
+// 		}
+// 	}
+// 	return dis
+// }
 
 func (desc *Description) describeMutator(ins Instruction) []Diff {
 	sty := style.Styles{}

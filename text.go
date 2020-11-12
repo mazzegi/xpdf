@@ -4,6 +4,7 @@ import (
 	"github.com/mazzegi/xpdf/markup"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/text"
+	"github.com/mazzegi/xpdf/xdoc"
 )
 
 func (p *Processor) setMarkupFont(textStyles markup.TextStyle, baseFont style.Font) {
@@ -64,7 +65,7 @@ func (p *Processor) textLines(s string, width float64, baseFont style.Font) []te
 	return lines
 }
 
-func (p *Processor) textHeight(s string, width float64, sty style.Styles) float64 {
+func (p *Processor) textHeight(iss []xdoc.Instruction, width float64, sty style.Styles) float64 {
 	p.engine.ChangeFont(sty.Font)
 	lines := p.textLines(s, width, sty.Font)
 	lineHeight := p.engine.FontHeight() * sty.Dimension.LineSpacing
@@ -72,7 +73,7 @@ func (p *Processor) textHeight(s string, width float64, sty style.Styles) float6
 	return float64(len(lines))*lineHeight - lineHeight + p.engine.FontHeight()
 }
 
-func (p *Processor) writeText(s string, width float64, sty style.Styles) {
+func (p *Processor) writeText(iss []xdoc.Instruction, width float64, sty style.Styles) {
 	p.engine.ChangeFont(sty.Font)
 	p.engine.SetTextColor(sty.Text.Values())
 	lines := p.textLines(s, width, sty.Font)

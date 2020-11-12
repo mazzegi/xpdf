@@ -123,14 +123,15 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 }
 
 func (p *Processor) renderText(text *xdoc.Text) {
-	if text.Text == "" {
+	if len(text.Instructions.ISS) == 0 {
 		return
 	}
 	defer p.resetStyles()
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	width := p.page().EffectiveWidth(sty.Width)
 
-	p.writeTextFnc(sty)(text.Text, width, sty)
+	//p.writeTextFnc(sty)(text.Text, width, sty)
+	p.writeTextFnc(sty)(text.ISS, width, sty) //TODO: change this to a reasonable value
 }
 
 func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
@@ -139,10 +140,10 @@ func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {
 	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right
 	var height float64
 	if sty.Dimension.Height <= 0 {
-		if box.Text == "" {
+		if len(box.ISS) == 0 {
 			height = p.engine.FontHeight()
 		} else {
-			height = p.textHeightFnc(sty)(box.Text, width, sty)
+			height = p.textHeightFnc(sty)(box.ISS, width, sty)
 		}
 	} else {
 		height = sty.Dimension.Height
@@ -157,8 +158,8 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 	width := pa.EffectiveWidth(sty.Width) - sty.Padding.Left - sty.Padding.Right
 	var height float64
 	if sty.Dimension.Height <= 0 {
-		if box.Text != "" {
-			height = p.textHeightFnc(sty)(box.Text, width, sty)
+		if len(box.ISS) > 0 {
+			height = p.textHeightFnc(sty)(box.ISS, width, sty)
 		} else {
 			height = p.engine.FontHeight()
 		}
@@ -182,14 +183,14 @@ func (p *Processor) renderTextBox(box *xdoc.Box, pa PrintableArea) {
 
 	p.engine.SetY(y0 + sty.Box.Padding.Top)
 	p.engine.SetX(x0 + sty.Box.Padding.Left)
-	if box.Text != "" {
-		p.writeTextFnc(sty)(box.Text, width, sty)
+	if len(box.ISS) > 0 {
+		p.writeTextFnc(sty)(box.ISS, width, sty)
 	}
 	p.engine.SetY(y1)
 }
 
 //
-func (p *Processor) textHeightFnc(sty style.Styles) func(string, float64, style.Styles) float64 {
+func (p *Processor) textHeightFnc(sty style.Styles) func([]xdoc.Instruction, float64, style.Styles) float64 {
 	switch sty.HAlign {
 	case style.HAlignBlock:
 		return p.textHeightHyphenated
@@ -198,7 +199,7 @@ func (p *Processor) textHeightFnc(sty style.Styles) func(string, float64, style.
 	}
 }
 
-func (p *Processor) writeTextFnc(sty style.Styles) func(string, float64, style.Styles) {
+func (p *Processor) writeTextFnc(sty style.Styles) func([]xdoc.Instruction, float64, style.Styles) {
 	switch sty.HAlign {
 	case style.HAlignBlock:
 		return p.writeTextHyphenated

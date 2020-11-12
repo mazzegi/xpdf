@@ -6,6 +6,7 @@ import (
 	"github.com/mazzegi/xpdf/markup"
 	"github.com/mazzegi/xpdf/style"
 	"github.com/mazzegi/xpdf/text"
+	"github.com/mazzegi/xpdf/xdoc"
 )
 
 func (p *Processor) textLinesHyphenated(s string, width float64, baseFont style.Font) []textLine {
@@ -82,7 +83,7 @@ func (p *Processor) textLinesHyphenated(s string, width float64, baseFont style.
 	return lines
 }
 
-func (p *Processor) textHeightHyphenated(s string, width float64, sty style.Styles) float64 {
+func (p *Processor) textHeightHyphenated(iss []xdoc.Instruction, width float64, sty style.Styles) float64 {
 	p.engine.ChangeFont(sty.Font)
 	lines := p.textLinesHyphenated(s, width, sty.Font)
 	lineHeight := p.engine.FontHeight() * sty.Dimension.LineSpacing
@@ -90,7 +91,7 @@ func (p *Processor) textHeightHyphenated(s string, width float64, sty style.Styl
 	return float64(len(lines))*lineHeight - lineHeight + p.engine.FontHeight()
 }
 
-func (p *Processor) writeTextHyphenated(s string, width float64, sty style.Styles) {
+func (p *Processor) writeTextHyphenated(iss []xdoc.Instruction, width float64, sty style.Styles) {
 	p.engine.ChangeFont(sty.Font)
 	p.engine.SetTextColor(sty.Text.Values())
 	lines := p.textLinesHyphenated(s, width, sty.Font)

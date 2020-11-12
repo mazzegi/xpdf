@@ -1,0 +1,51 @@
+<document>
+
+    <meta>
+        <author>mazzegi</author>
+        <creator>MPDF</creator>
+        <subject>Sample 1</subject>
+    </meta>
+    <page>
+        <orientation>portrait</orientation>
+        <format>a4</format>
+        <margins>
+            <left>30</left>
+            <top>30</top>
+            <right>15</right>
+            <bottom>20</bottom>
+        </margins>
+    </page>
+
+    <style>
+font{
+    font-family: arial;
+    font-point-size: 12;
+    font-style: normal;	
+}
+bold{
+    font-weight: bold;
+}
+italic{
+    font-style: italic;
+}
+    </style>
+
+    <header>
+    </header>
+
+    <footer>
+    </footer>
+
+    <body>
+        <font class="font"/>
+        <text class="times">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+            <p class="bold">At vero eos et accusam</p>
+            Sic!
+            <br/>
+            Kovulo mia som causa.
+            <p class="italic bold">semper opa</p>
+        </text>
+
+    </body>
+</document>
