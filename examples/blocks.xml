@@ -40,11 +40,14 @@ italic{
         <font class="font"/>
         <text class="times">
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+            <br/>
+            Enter Quamcaption: _______________
+            <br/>
             <p class="bold">At vero eos et accusam</p>
             Sic!
             <br/>
             Kovulo mia som causa.
-            <p class="italic bold">semper opa</p>
+            <p class="italic bold">semper opa.</p>
         </text>
 
     </body>

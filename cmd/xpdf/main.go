@@ -19,7 +19,7 @@ func main() {
 		// fmt.Println("usage: xpdf <in> <optional:out>")
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
-		in = "../../examples/table1.xml"
+		in = "../../examples/blocks.xml"
 		//in = "../../examples/doc1.xml"
 		//in = "../../examples/hyphen.xml"
 	} else {

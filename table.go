@@ -83,7 +83,6 @@ func (row *tableRow) maxCellHeight() float64 {
 
 type tableCell struct {
 	style.Styles
-	//text string
 	iss []xdoc.Instruction
 
 	// auxiliary parameters
@@ -321,8 +320,7 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 				Styles:  cellSty,
 				colSpan: xcell.ColSpan,
 				rowSpan: xcell.RowSpan,
-				//text:    xcell.Content,
-				iss: xcell.ISS,
+				iss:     xcell.ISS,
 			}
 
 			row.cells = append(row.cells, cell)

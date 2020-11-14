@@ -130,8 +130,7 @@ func (p *Processor) renderText(text *xdoc.Text) {
 	sty := text.MutatedStyles(p.doc.StyleClasses(), p.currStyles)
 	width := p.page().EffectiveWidth(sty.Width)
 
-	//p.writeTextFnc(sty)(text.Text, width, sty)
-	p.writeTextFnc(sty)(text.ISS, width, sty) //TODO: change this to a reasonable value
+	p.writeTextFnc(sty)(text.ISS, width, sty)
 }
 
 func (p *Processor) textBoxHeight(box *xdoc.Box, pa PrintableArea) float64 {

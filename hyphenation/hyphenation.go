@@ -40,6 +40,12 @@ func (h *Hyphenator) Hyphenate(s string) []string {
 		//don't hyphenate words with less than 3 runes
 		return []string{s}
 	}
+	if strings.Contains(s, " ") {
+		return []string{s}
+	}
+	if len(s) > 100 {
+		return []string{s}
+	}
 	rs := []rune("." + strings.ToLower(s) + ".")
 	ws := make([]int, len(rs)+1)
 	for subSize := 1; subSize <= len(rs); subSize++ {
