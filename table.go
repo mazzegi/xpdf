@@ -392,6 +392,7 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 		p.writeTextFnc(cell.Styles)(cell.iss, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
 	}
 
+	p.engine.SetX(paddedPa.x0)
 	for _, is := range cell.iss {
 		switch is := is.(type) {
 		case *xdoc.Box:
@@ -404,11 +405,9 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 			default: //style.VAlignTop:
 				p.engine.SetY(paddedPa.y0)
 			}
-			p.engine.SetX(paddedPa.x0)
 			p.renderTextBox(is, paddedPa)
 		case *xdoc.Image:
 			p.engine.SetY(paddedPa.y0)
-			p.engine.SetX(paddedPa.x0)
 			p.renderImage(is, paddedPa)
 		}
 	}

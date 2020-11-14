@@ -1,0 +1,60 @@
+<document>
+
+    <meta>
+        <author>mazzegi</author>
+        <creator>MPDF</creator>
+        <subject>Sample 1</subject>
+    </meta>
+    <page>
+        <orientation>portrait</orientation>
+        <format>a4</format>
+        <margins>
+            <left>30</left>
+            <top>30</top>
+            <right>15</right>
+            <bottom>20</bottom>
+        </margins>
+    </page>
+
+    <style>
+font{
+    font-family: arial;
+    font-point-size: 12;
+    font-style: normal;	
+}
+bold{
+    font-weight: bold;
+}
+italic{
+    font-style: italic;
+}
+
+table{
+    padding: 2,2,2,2;
+    border: 1,1,1,1;
+    line-width: 0.3;
+}
+
+no-border-left{
+    border: 0,1,1,1;
+}
+    </style>
+
+    <header>
+    </header>
+
+    <footer>
+    </footer>
+
+
+
+    <body>
+        <font class="font"/>
+        <table class="table">
+            <tr>
+                <td>cell 1</td>
+                <td class="no-border-left">cell 2</td>
+            </tr>
+        </table>
+    </body>
+</document>

@@ -34,8 +34,7 @@ func (p *Processor) textLinesHyphenated(iss []xdoc.Instruction, width float64, s
 
 	lines := []textLine{}
 	curr := textLine{}
-	for i, is := range iss {
-		Logf("generate lines: %d ", i)
+	for _, is := range iss {
 		var isitem *textItem
 		switch is := is.(type) {
 		case *xdoc.LineBreak:
@@ -115,11 +114,9 @@ func (p *Processor) textHeightHyphenated(iss []xdoc.Instruction, width float64, 
 }
 
 func (p *Processor) writeTextHyphenated(iss []xdoc.Instruction, width float64, sty style.Styles) {
-	Logf("write text hyphenated: %d instr", len(iss))
 	p.engine.ChangeFont(sty.Font)
 	p.engine.SetTextColor(sty.Text.Values())
 	lines := p.textLinesHyphenated(iss, width, sty)
-	Logf("write text hyphenated: write %d lines", len(lines))
 	xLeft, _ := p.engine.GetXY()
 	for _, line := range lines {
 		p.engine.SetX(xLeft)
