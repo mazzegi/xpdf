@@ -21,7 +21,7 @@ func fpdfOrientation(o xdoc.Orientation) string {
 	return ""
 }
 
-func fpdfFormat(f xdoc.Format) string {
+func fpdfFormat(f xdoc.PaperFormat) string {
 	switch f {
 	case xdoc.FormatA3:
 		return "A3"

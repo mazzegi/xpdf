@@ -83,8 +83,7 @@ func (row *tableRow) maxCellHeight() float64 {
 
 type tableCell struct {
 	style.Styles
-	text string
-	iss  []xdoc.Instruction
+	iss []xdoc.Instruction
 
 	// auxiliary parameters
 	colSpan   int
@@ -254,7 +253,7 @@ func (p *Processor) assignCellMinHeight(cell *tableCell) {
 	}
 	availableWidth -= cell.Padding.Left + cell.Padding.Right
 
-	textHeight := p.textHeightFnc(cell.Styles)(cell.text, availableWidth, cell.Styles)
+	textHeight := p.textHeightFnc(cell.Styles)(cell.iss, availableWidth, cell.Styles)
 
 	cellHeight := textHeight + cell.Padding.Top + cell.Padding.Bottom
 
@@ -321,8 +320,7 @@ func (p *Processor) transformTable(xtab *xdoc.Table) *table {
 				Styles:  cellSty,
 				colSpan: xcell.ColSpan,
 				rowSpan: xcell.RowSpan,
-				text:    xcell.Content,
-				iss:     xcell.Instructions,
+				iss:     xcell.ISS,
 			}
 
 			row.cells = append(row.cells, cell)
@@ -378,8 +376,8 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 	p.drawBox(pa.x0, pa.y0, pa.x1, pa.y1, cell.Styles)
 
 	paddedPa := pa.WithPadding(cell.Padding)
-	if cell.text != "" {
-		textHeight := p.textHeight(cell.text, paddedPa.Width(), cell.Styles)
+	if len(cell.iss) > 0 {
+		textHeight := p.textHeight(cell.iss, paddedPa.Width(), cell.Styles)
 		textMargin := paddedPa.Height() - textHeight
 		switch cell.VAlign {
 		case style.VAlignMiddle:
@@ -391,7 +389,7 @@ func (p *Processor) renderCell(pa PrintableArea, cell *tableCell) {
 		}
 		p.engine.SetX(paddedPa.x0)
 
-		p.writeTextFnc(cell.Styles)(cell.text, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
+		p.writeTextFnc(cell.Styles)(cell.iss, pa.Width()-cell.Padding.Left-cell.Padding.Right, cell.Styles)
 	}
 
 	for _, is := range cell.iss {

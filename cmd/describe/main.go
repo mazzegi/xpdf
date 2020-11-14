@@ -10,7 +10,7 @@ import (
 func main() {
 	var in string
 	if len(os.Args) < 2 {
-		in = "../../examples/table1.xml"
+		in = "../../examples/blocks.xml"
 	} else {
 		in = os.Args[1]
 	}

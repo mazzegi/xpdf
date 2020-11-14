@@ -39,14 +39,14 @@ const (
 	OrientationLandscape Orientation = "landscape"
 )
 
-type Format string
+type PaperFormat string
 
 const (
-	FormatA3     Format = "a3"
-	FormatA4     Format = "a4"
-	FormatA5     Format = "a5"
-	FormatLetter Format = "letter"
-	FormatLegal  Format = "legal"
+	FormatA3     PaperFormat = "a3"
+	FormatA4     PaperFormat = "a4"
+	FormatA5     PaperFormat = "a5"
+	FormatLetter PaperFormat = "letter"
+	FormatLegal  PaperFormat = "legal"
 )
 
 type Document struct {
@@ -78,7 +78,7 @@ type Margins struct {
 type Page struct {
 	XMLName     xml.Name    `xml:"page"`
 	Orientation Orientation `xml:"orientation"`
-	Format      Format      `xml:"format"`
+	Format      PaperFormat `xml:"format"`
 	Margins     Margins     `xml:"margins"`
 }
 

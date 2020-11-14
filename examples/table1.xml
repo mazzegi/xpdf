@@ -47,6 +47,12 @@
         border: 1,1,1,1;
         padding: 1,1,1,1;
     }
+    bold{
+    font-weight: bold;
+    }
+    italic{
+        font-style: italic;
+    }
     </style>
 
     <header>
@@ -59,100 +65,104 @@
         <!-- <sety y="190"/> -->
         <table class="default-table">
             <tr class="table-header align-center">
-                <td>__Number__</td>
-                <td>__Description__</td>
-                <td>__Label__</td>
-                <td>__Fazit__</td>
+                <td>Number</td>
+                <td>Description</td>
+                <td>Label</td>
+                <td>Fazit</td>
             </tr>
             <tr>
-                <td>__1__: c4 e4; kf3 c6</td>
+                <td>1: c4 e4; kf3 c6</td>
                 <td colspan="2" class="align-right">laoreet dolore magna aliquam</td>
                 <!-- <td>quam nautilus</td> -->
                 <td>sed igitur</td>
             </tr>
             <tr>
-                <td>__2__: c4 e4; kf3 c6</td>
+                <td>2: c4 e4; kf3 c6</td>
                 <td class="align-right">When chaotic vixens try to visualize dramatic coincidences, situations tend to be more ridicolous.</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
             <tr>
-                <td>__3__: c4 e4; kf3 c6</td>
+                <td>3: c4 e4; kf3 c6</td>
                 <td rowspan="2" class="align-right">laoreet dolore magna aliquam confidate ora plus equipio</td>
                 <td>quam nautilus</td>
                 <td>sed igitur</td>
             </tr>
             <tr>
-                <td>__4__: c4 e4; kf3 c6</td>
+                <td>4: c4 e4; kf3 c6</td>
                 <!-- td>laoreet dolore magna aliquam</td> -->
                 <td>quam nautilus</td>
                 <td style="v-align: bottom;">sed igitur</td>
             </tr>
             <tr>
-                <td>__5__: c4 e4; kf3 c6</td>
+                <td>5: c4 e4; kf3 c6</td>
                 <td>laoreet dolore magna aliquam</td>
-                <td colspan="2" rowspan="2" class="align-center" style="v-align: middle;">quam nautilus fredericiana siq.\caputo orgis causa etiam _cicero_ parlare numquat.</td>
-                <!--<td>sed igitur</td>-->
-            </tr>
-            <tr>
-                <td>__6__: c4 e4; kf3 c6</td>
-                <td>laoreet dolore magna aliquam</td>
-                <!--<td>quam nautilus</td>-->
-                <!--<td>sed igitur</td>-->
-            </tr>
-            <tr>
-                <td>__7__: c4 e4; kf3 c6</td>
-                <td>laoreet dolore magna aliquam</td>
-                <td rowspan="2">quam nautilus</td>
-                <td>sed igitur</td>
-            </tr>
-            <tr>
-                <td>__8__: c4 e4; kf3 c6</td>
-            </tr>
-            <tr>
-                <td>__9__: c4 e4; kf3 c6</td>
-                <td class="align-left">laoreet dolore magna aliquam</td>
-                <td>quam nautilus</td>
-                <td>sed igitur</td>
-            </tr>
-            <tr>
-                <td>__10__: c4 e4; kf3 c6</td>
-                <td >
-                    <!-- <image style="width: 10; height: 10;">virus.png</image> -->
-                    <image>virus.png</image>
-                    <!-- <image style="offset-x: 12; width: 10; height: 10;">virus.png</image> -->
-                </td>
-                <td>quam nautilus</td>
-                <td>sed igitur</td>
-            </tr>
-            <tr>
-                <td>__11__: c4 e4; kf3 c6</td>
-                <td class="align-left">laoreet dolore magna aliquam</td>
-                <td>quam nautilus</td>
-                <td>sed igitur</td>
-            </tr>
-            <tr>
-                <td>__12__: c4 e4; kf3 c6</td>
-                <td class="align-left">laoreet dolore magna aliquam</td>
-                <td style="v-align: middle;">
-                    <box class="perc-box">87.3%</box>
-                </td>
-                <td>sed igitur</td>
-            </tr>
-            <tr>
-                <td>__13__: c4 e4; kf3 c6</td>
-                <td class="align-left">laoreet dolore magna aliquam</td>
-                <td style="v-align: middle;">
-                    <box class="perc-box" style="width: 40; background-color: #aaaaff;"></box>
-                    <box class="perc-box" style="width: 20;">87.3%</box>
-                </td>
-                <td>sed igitur</td>
-            </tr>
-        </table>
+                <td colspan="2" rowspan="2" class="align-center" style="v-align: middle;">
+                    quam nautilus fredericiana siq.<br/>
+                    caputo orgis causa etiam
+                <p class="bold">cicero</p>
+                    parlare numquat.
+            </td>
+        </tr>
+        <tr>
+            <td>6: c4 e4; kf3 c6</td>
+            <td>laoreet dolore magna aliquam</td>
+            <!--<td>quam nautilus</td>-->
+            <!--<td>sed igitur</td>-->
+        </tr>
+        <tr>
+            <td>7: c4 e4; kf3 c6</td>
+            <td>laoreet dolore magna aliquam</td>
+            <td rowspan="2">quam nautilus</td>
+            <td>sed igitur</td>
+        </tr>
+        <tr>
+            <td>8: c4 e4; kf3 c6</td>
+        </tr>
+        <tr>
+            <td>9: c4 e4; kf3 c6</td>
+            <td class="align-left">laoreet dolore magna aliquam</td>
+            <td>quam nautilus</td>
+            <td>sed igitur</td>
+        </tr>
+        <tr>
+            <td>10: c4 e4; kf3 c6</td>
+            <td >
+                <!-- <image style="width: 10; height: 10;">virus.png</image> -->
+                <image>virus.png</image>
+                <!-- <image style="offset-x: 12; width: 10; height: 10;">virus.png</image> -->
+            </td>
+            <td>quam nautilus</td>
+            <td>sed igitur</td>
+        </tr>
+        <tr>
+            <td>11: c4 e4; kf3 c6</td>
+            <td class="align-left">laoreet dolore magna aliquam</td>
+            <td>quam nautilus</td>
+            <td>sed igitur</td>
+        </tr>
+        <tr>
+            <td>12: c4 e4; kf3 c6</td>
+            <td class="align-left">laoreet dolore magna aliquam</td>
+            <td style="v-align: middle;">
+                <box class="perc-box">87.3%</box>
+            </td>
+            <td>sed igitur</td>
+        </tr>
+        <tr>
+            <td>13: c4 e4; kf3 c6</td>
+            <td class="align-left">laoreet dolore magna aliquam</td>
+            <td style="v-align: middle;">
+                <box class="perc-box" style="width: 40; background-color: #aaaaff;"></box>
+                <box class="perc-box" style="width: 20;">87.3%</box>
+            </td>
+            <td>sed igitur</td>
+        </tr>
+    </table>
 
-        <lf lines="1"/>
-        <text>Sic!</text>
-        <!-- <image style="width: 10; height: 10;">virus.png</image> -->
-        <image>virus.png</image>
-    </body>
+    <lf lines="1"/>
+    <text>Sic!</text>
+    <!-- <image style="width: 10; height: 10;">virus.png</image> -->
+    <image>virus.png</image>
+</body>
 </document>
