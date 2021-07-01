@@ -75,9 +75,9 @@ percent-bar {
              ö ü ä Ö Ü Ä ß sed diam voluptua.
                 </td>
                 <td style="column-width:80; h-align: right;">
-            Some right\
-            aligned\
-            text\
+            Some right<br/>
+            aligned<br/>
+            text<br/>
             ...
                 </td>
             </tr>

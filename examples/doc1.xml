@@ -89,7 +89,7 @@ default-box{
             Русская школа в Мюнхене «Русско-немецкий образовательный центр»
         </box>
         <box class="default-box" style="width: 100; h-align: left;">
-            geležinkelio
+            geležinkelio ßäö
         </box>
         <lf lines="3"/>
         <!-- <setx x="35"/> -->
@@ -101,7 +101,7 @@ default-box{
         Lorem ipsum dolor sit amet,
         consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
         dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.        
+        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. üöä       
         </text>
 
     </body>
