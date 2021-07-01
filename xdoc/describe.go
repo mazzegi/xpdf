@@ -166,9 +166,41 @@ func (desc *Description) describeTableCell(td *TableCell) []DescribeItem {
 	i := DescribeItem{
 		Name:       fmt.Sprintf("table-cell colspan=%d rowspan=%d", td.ColSpan, td.RowSpan),
 		StyleDiffs: desc.describeMutator(td),
-		//Value:      clearStr(td.Content),
 	}
 	i.Items = append(i.Items, desc.describeInstructions(td.Instructions)...)
+	return []DescribeItem{i}
+}
+
+func (desc *Description) describeGrid(g *Grid) []DescribeItem {
+	i := DescribeItem{
+		Name:       "grid",
+		StyleDiffs: desc.describeMutator(g),
+	}
+	for _, gr := range g.Rows {
+		i.Items = append(i.Items, desc.describeGridRow(gr)...)
+	}
+	for _, p := range g.Parts {
+		i.Items = append(i.Items, desc.describeGridPart(p)...)
+	}
+	return []DescribeItem{i}
+}
+
+func (desc *Description) describeGridRow(gr *GridRow) []DescribeItem {
+	i := DescribeItem{
+		Name:       "grid-row",
+		StyleDiffs: desc.describeMutator(gr),
+		Value:      strings.Join(gr.Areas, " "),
+	}
+	return []DescribeItem{i}
+}
+
+func (desc *Description) describeGridPart(p *GridPart) []DescribeItem {
+	i := DescribeItem{
+		Name:       "grid-part",
+		StyleDiffs: desc.describeMutator(p),
+		Value:      p.Area,
+	}
+	i.Items = append(i.Items, desc.describeInstructions(p.Instructions)...)
 	return []DescribeItem{i}
 }
 
@@ -237,6 +269,8 @@ func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 			})
 		case *Table:
 			dis = append(dis, desc.describeTable(is)...)
+		case *Grid:
+			dis = append(dis, desc.describeGrid(is)...)
 		}
 	}
 	return dis

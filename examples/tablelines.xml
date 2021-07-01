@@ -56,5 +56,12 @@ no-border-left{
                 <td class="no-border-left">cell 2</td>
             </tr>
         </table>
+
+        <grid>
+            <gr>left left top top</gr>
+            <gr>left left right right</gr>
+            <gr>left left right right</gr>
+            <gr>left left btm btm</gr>
+        </grid>
     </body>
 </document>

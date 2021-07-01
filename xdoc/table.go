@@ -21,7 +21,6 @@ type TableCell struct {
 	Styled
 	XMLName xml.Name `xml:"td"`
 	Instructions
-	//Content string `xml:",chardata"`
 	ColSpan int `xml:"colspan,attr"`
 	RowSpan int `xml:"rowspan,attr"`
 }

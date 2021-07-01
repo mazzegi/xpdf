@@ -36,7 +36,7 @@ func (is *Instructions) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 		case xml.StartElement:
 			i, err := registry.DecodeInstruction(d, t)
 			if err != nil {
-				return errors.Wrapf(err, "decode token %v", token)
+				return errors.Wrapf(err, "decode token %v", t.Name.Local)
 			}
 			is.ISS = append(is.ISS, i)
 		case xml.CharData:
@@ -90,4 +90,20 @@ type Image struct {
 	Styled
 	XMLName xml.Name `xml:"image"`
 	Source  string   `xml:",chardata"`
+}
+
+type TextBlock struct {
+	NoStyles
+	Text string
+}
+
+type Paragraph struct {
+	Styled
+	XMLName xml.Name `xml:"p"`
+	Text    string   `xml:",chardata"`
+}
+
+type LineBreak struct {
+	NoStyles
+	XMLName xml.Name `xml:"br"`
 }

@@ -30,6 +30,13 @@ func NewProcessor(engine engine.Engine, hyphenator *hyphenation.Hyphenator, doc 
 }
 
 func (p *Processor) Process(w io.Writer) error {
+	//TODO: support grid layouts - like in CSS "grid-template-areas"
+	/*
+			grid-template-areas:
+		            "l a a"
+		            "l c c"
+		            "l c c";
+	*/
 	//TODO: make page-count and current-page aliases options
 	p.engine.SetPageCountAlias("{np}")
 	p.engine.OnHeader(func() {
@@ -118,6 +125,8 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 			p.renderTable(i)
 		case *xdoc.Image:
 			p.renderImage(i, p.page().printableArea)
+		case *xdoc.Grid:
+			p.renderGrid(i, p.page().printableArea)
 		}
 	}
 }
