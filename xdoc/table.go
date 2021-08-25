@@ -7,8 +7,9 @@ import (
 
 type Table struct {
 	Styled
-	XMLName xml.Name    `xml:"table"`
-	Rows    []*TableRow `xml:"tr"`
+	XMLName      xml.Name    `xml:"table"`
+	RepeatHeader bool        `xml:"repeatheader,attr"`
+	Rows         []*TableRow `xml:"tr"`
 }
 
 type TableRow struct {
@@ -23,6 +24,20 @@ type TableCell struct {
 	Instructions
 	ColSpan int `xml:"colspan,attr"`
 	RowSpan int `xml:"rowspan,attr"`
+}
+
+func (t *Table) DecodeAttrs(attrs []xml.Attr) error {
+	for _, a := range attrs {
+		switch a.Name.Local {
+		case "repeatheader":
+			n, err := strconv.ParseInt(a.Value, 10, 64)
+			if err != nil {
+				return err
+			}
+			t.RepeatHeader = n > 0
+		}
+	}
+	return t.Styled.DecodeAttrs(attrs)
 }
 
 func (c *TableCell) DecodeAttrs(attrs []xml.Attr) error {

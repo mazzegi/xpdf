@@ -102,8 +102,7 @@ percent-bar {
                 <td style="column-width: 60; text-color: #880000;">
                     Duis autem vel eum iriure dolor in *hendrerit* in vulputate velit esse molestie consequat, vel illum dolore eu feugiat            
                 </td>
-                <td style="column-width: 40;">
-                    <image>bug.png</image>
+                <td style="column-width: 40;">                    
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
                 45,67 %
@@ -115,8 +114,7 @@ percent-bar {
                 </td>
             </tr>
             <tr>
-                <td style="column-width: 40; column-span: 2;">
-                    <image>bug.png</image>
+                <td style="column-width: 40; column-span: 2;">                    
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 25; background-color: #eeeeee;"></box>
                     <box class="percent-bar" style="offset-x: 7; offset-y: 0.6; width: 15;">
                 45,67 %
@@ -125,8 +123,7 @@ percent-bar {
                 <td>sed diam 9400</td>
             </tr>
         </table>
-
-        <image>bug.png</image>
+        
         <lf lines="3.0"/>
 
         <box style="line-height: 1.5; width: 69; h-align: center; padding: 3,3,3,3; line-width: 0.3; color: #0000FF; background-color: #00FF00; border: 1,1,1,1;">
@@ -161,7 +158,11 @@ percent-bar {
         <text>Sic!</text>
         <lf lines="2.0"/>
 
-        <table style="border: 1,1,1,1; padding: 2,2,2,2;">
+        <table style="border: 1,1,1,1; padding: 2,2,2,2;" repeatheader="1">
+            <tr>
+                <td>Head_1</td>
+                <td style="h-align: center;">Head_2</td>
+            </tr>
             <tr>
                 <td>__1__: c4 e4; kf3 c6</td>
                 <td style="h-align: center;">laoreet dolore magna aliquam</td>
@@ -169,6 +170,50 @@ percent-bar {
             <tr>
                 <td>__2__: c4 e4; kf3 c6</td>
                 <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__3__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__4__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__5__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__6__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__7__: c4 e4; kf3 c6</td>
+                <td style="h-align: right;">magna ubi aliquam</td>
+            </tr>
+            <tr>
+                <td>__2__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__3__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__4__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__5__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__6__: c4 e4; kf3 c6</td>
+                <td style="h-align: center;">laoreet dolore magna aliquam</td>
+            </tr>
+            <tr>
+                <td>__7__: c4 e4; kf3 c6</td>
+                <td style="h-align: right;">magna ubi aliquam</td>
             </tr>
             <tr>
                 <td>__3__: c4 e4; kf3 c6</td>

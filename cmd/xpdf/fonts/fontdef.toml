@@ -1,52 +1,46 @@
 MonoFont = "dejavu-mono"
 
 [[Fonts]]
-  Name = "dejavu"
+Name = "dejavu"
   [[Fonts.StyleDefinitions]]
-    Style = "regular"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf"
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold+italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf"
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 [[Fonts]]
-  Name = "dejavu-serif"
+Name = "dejavu-serif"
   [[Fonts.StyleDefinitions]]
-    Style = "regular"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf"
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold+italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf"
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 
 [[Fonts]]
-  Name = "dejavu-mono"
+Name = "dejavu-mono"
   [[Fonts.StyleDefinitions]]
-    Style = "regular"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf"
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
   [[Fonts.StyleDefinitions]]
-    Style = "bold+italic"
-    FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf"
-
-[[Fonts]]
-  Name = "chin"
-  [[Fonts.StyleDefinitions]]
-    Style = "regular"
-    FilePath = "DroidSansFallback.ttf"        
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"

@@ -343,14 +343,10 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 		return
 	}
 
-	//TODO: add a "repeat first row on page-break" option
 	page := p.page()
 	x0, y := p.engine.GetXY()
-	for _, row := range tab.rows {
-		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
-			p.engine.AddPage()
-			_, y = p.engine.GetXY()
-		}
+
+	renderRow := func(row *tableRow) {
 		x := x0
 		for _, cell := range row.cells {
 			if cell.spannedBy != nil || cell.zero {
@@ -368,6 +364,17 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 		}
 		y += row.height
 		p.engine.SetX(x0)
+	}
+
+	for _, row := range tab.rows {
+		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
+			p.engine.AddPage()
+			_, y = p.engine.GetXY()
+			if xtab.RepeatHeader {
+				renderRow(tab.rows[0])
+			}
+		}
+		renderRow(row)
 	}
 	p.engine.SetY(y)
 }
