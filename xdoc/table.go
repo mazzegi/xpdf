@@ -3,12 +3,14 @@ package xdoc
 import (
 	"encoding/xml"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 type Table struct {
 	Styled
 	XMLName      xml.Name    `xml:"table"`
-	RepeatHeader bool        `xml:"repeatheader,attr"`
+	RepeatHeader int         `xml:"repeatheader,attr"`
 	Rows         []*TableRow `xml:"tr"`
 }
 
@@ -33,8 +35,10 @@ func (t *Table) DecodeAttrs(attrs []xml.Attr) error {
 			n, err := strconv.ParseInt(a.Value, 10, 64)
 			if err != nil {
 				return err
+			} else if n < 0 || n > 10 {
+				return errors.Errorf("invalid value %d for repeatheader - must be in [0,10]", n)
 			}
-			t.RepeatHeader = n > 0
+			t.RepeatHeader = int(n)
 		}
 	}
 	return t.Styled.DecodeAttrs(attrs)

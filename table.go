@@ -370,8 +370,13 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
-			if i > 0 && xtab.RepeatHeader {
-				renderRow(tab.rows[0])
+			if i > 0 && xtab.RepeatHeader > 0 {
+				//renderRow(tab.rows[0])
+				for rhr := 0; rhr < xtab.RepeatHeader; rhr++ {
+					if rhr >= 0 && rhr < len(tab.rows) {
+						renderRow(tab.rows[rhr])
+					}
+				}
 			}
 		}
 		renderRow(row)
