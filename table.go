@@ -366,11 +366,11 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 		p.engine.SetX(x0)
 	}
 
-	for _, row := range tab.rows {
+	for i, row := range tab.rows {
 		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
-			if xtab.RepeatHeader {
+			if i > 0 && xtab.RepeatHeader {
 				renderRow(tab.rows[0])
 			}
 		}
