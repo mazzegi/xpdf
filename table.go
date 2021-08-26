@@ -367,17 +367,19 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 	}
 
 	//check if we have to start a new page for the entire table
-	var headHeight float64
-	for i := 0; i < xtab.RepeatHeader; i++ {
-		if i < len(tab.rows) {
-			headHeight += tab.rows[i].maxCellHeight()
+	if !p.preventPageBreak {
+		var headHeight float64
+		for i := 0; i < xtab.RepeatHeader+1; i++ {
+			if i < len(tab.rows) {
+				headHeight += tab.rows[i].maxCellHeight()
+			}
+		}
+		if y+headHeight > page.printableArea.y1 {
+			Logf("add initial table pagebreak (y=%.2f, head=%.2f, ppa=%.2f)", y, headHeight, page.printableArea.y1)
+			p.engine.AddPage()
+			_, y = p.engine.GetXY()
 		}
 	}
-	if y+headHeight > page.printableArea.y1 {
-		p.engine.AddPage()
-		_, y = p.engine.GetXY()
-	}
-	//
 
 	for i, row := range tab.rows {
 		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {

@@ -156,12 +156,16 @@ percent-bar {
         </box>
 
         <text>Sic!</text>
-        <lf lines="2.0"/>
+        <lf lines="22.0"/>
 
-        <table style="border: 1,1,1,1; padding: 2,2,2,2;" repeatheader="1">
+        <table style="border: 1,1,1,1; padding: 2,2,2,2;" repeatheader="2">
             <tr>
                 <td>Head_1</td>
                 <td style="h-align: center;">Head_2</td>
+            </tr>
+            <tr>
+                <td>2_Head_1</td>
+                <td style="h-align: center;">2_Head_2</td>
             </tr>
             <tr>
                 <td>__1__: c4 e4; kf3 c6</td>
