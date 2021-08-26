@@ -366,12 +366,24 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 		p.engine.SetX(x0)
 	}
 
+	//check if we have to start a new page for the entire table
+	var headHeight float64
+	for i := 0; i < xtab.RepeatHeader; i++ {
+		if i < len(tab.rows) {
+			headHeight += tab.rows[i].maxCellHeight()
+		}
+	}
+	if y+headHeight > page.printableArea.y1 {
+		p.engine.AddPage()
+		_, y = p.engine.GetXY()
+	}
+	//
+
 	for i, row := range tab.rows {
 		if !p.preventPageBreak && y+row.maxCellHeight() > page.printableArea.y1 {
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
 			if i > 0 && xtab.RepeatHeader > 0 {
-				//renderRow(tab.rows[0])
 				for rhr := 0; rhr < xtab.RepeatHeader; rhr++ {
 					if rhr >= 0 && rhr < len(tab.rows) {
 						renderRow(tab.rows[rhr])
