@@ -48,7 +48,9 @@ func DescribeImage(src string) (ImageDescriptor, error) {
 }
 
 func (p *Processor) renderImage(img *xdoc.Image, pa PrintableArea) {
-	iDesc, err := DescribeImage(img.Source)
+	imgSrc := p.resolveFile(img.Source)
+
+	iDesc, err := DescribeImage(imgSrc)
 	if err != nil {
 		Logf("ERROR: describe image: %v", err)
 		return
@@ -88,5 +90,5 @@ func (p *Processor) renderImage(img *xdoc.Image, pa PrintableArea) {
 		height = paHeight
 	}
 
-	p.engine.PutImage(img.Source, x, y, width, height)
+	p.engine.PutImage(imgSrc, x, y, width, height)
 }

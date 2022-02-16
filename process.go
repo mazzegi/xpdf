@@ -3,6 +3,7 @@ package xpdf
 import (
 	"fmt"
 	"io"
+	"path/filepath"
 	"strings"
 
 	"github.com/mazzegi/xpdf/engine"
@@ -17,16 +18,26 @@ type Processor struct {
 	currStyles       style.Styles
 	hyphenator       *hyphenation.Hyphenator
 	preventPageBreak bool
+	workingDir       string
 }
 
-func NewProcessor(engine engine.Engine, hyphenator *hyphenation.Hyphenator, doc *xdoc.Document) *Processor {
+func NewProcessor(engine engine.Engine, hyphenator *hyphenation.Hyphenator, doc *xdoc.Document, workingDir string) *Processor {
 	p := &Processor{
 		engine:     engine,
 		hyphenator: hyphenator,
 		doc:        doc,
 		currStyles: DefaultStyle(),
+		workingDir: workingDir,
 	}
 	return p
+}
+
+func (p *Processor) resolveFile(name string) string {
+	if filepath.IsAbs(name) {
+		return name
+	}
+	rname := filepath.Join(p.workingDir, name)
+	return filepath.Clean(rname)
 }
 
 func (p *Processor) Process(w io.Writer) error {

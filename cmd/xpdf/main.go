@@ -62,8 +62,10 @@ func main() {
 		os.Exit(3)
 	}
 
+	wd, _ := os.Getwd()
+
 	hyp := hyphenation.NewEnUs()
-	p := xpdf.NewProcessor(engine, hyp, doc)
+	p := xpdf.NewProcessor(engine, hyp, doc, wd)
 	err = p.Process(outF)
 	if err != nil {
 		fmt.Println("ERROR processing input:", err)
