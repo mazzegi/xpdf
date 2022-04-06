@@ -28,6 +28,7 @@ func init() {
 
 	registry.RegisterInstruction(&Paragraph{})
 	registry.RegisterInstruction(&LineBreak{})
+	registry.RegisterInstruction(&PageBreak{})
 }
 
 type Registry struct {

@@ -255,6 +255,10 @@ func (desc *Description) describeInstructions(iss Instructions) []DescribeItem {
 			dis = append(dis, DescribeItem{
 				Name: "line-break",
 			})
+		case *PageBreak:
+			dis = append(dis, DescribeItem{
+				Name: "page-break",
+			})
 		case *TextBlock:
 			dis = append(dis, DescribeItem{
 				Name:  "text-block",

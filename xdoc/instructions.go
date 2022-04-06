@@ -107,3 +107,8 @@ type LineBreak struct {
 	NoStyles
 	XMLName xml.Name `xml:"br"`
 }
+
+type PageBreak struct {
+	NoStyles
+	XMLName xml.Name `xml:"newpage"`
+}

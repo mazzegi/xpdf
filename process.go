@@ -138,6 +138,8 @@ func (p *Processor) processInstructions(is xdoc.Instructions) {
 			p.renderImage(i, p.page().printableArea)
 		case *xdoc.Grid:
 			p.renderGrid(i, p.page().printableArea)
+		case *xdoc.PageBreak:
+			p.engine.AddPage()
 		}
 	}
 }
