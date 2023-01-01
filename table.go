@@ -169,7 +169,6 @@ func (tab *table) normalize() {
 	}
 }
 
-//
 func (t *table) processColumnSpans() {
 	for _, row := range t.rows {
 		newCells := []*tableCell{}
@@ -375,7 +374,6 @@ func (p *Processor) renderTable(xtab *xdoc.Table) {
 			}
 		}
 		if y+headHeight > page.printableArea.y1 {
-			Logf("add initial table pagebreak (y=%.2f, head=%.2f, ppa=%.2f)", y, headHeight, page.printableArea.y1)
 			p.engine.AddPage()
 			_, y = p.engine.GetXY()
 		}

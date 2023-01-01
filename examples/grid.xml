@@ -1,57 +1,55 @@
 <document>
-<meta>
-    <author>mazzegi</author>
-    <creator>MPDF</creator>
-    <subject>Sample 1</subject>
-</meta>
-<page>
-    <orientation>portrait</orientation>
-    <format>a4</format>
-    <margins>
-        <left>30</left>
-        <top>30</top>
-        <right>15</right>
-        <bottom>20</bottom>
-    </margins>
-</page>
+    <meta>
+        <author>mazzegi</author>
+        <creator>MPDF</creator>
+        <subject>Sample 1</subject>
+    </meta>
+    <page>
+        <orientation>portrait</orientation>
+        <format>a4</format>
+        <margins>
+            <left>30</left>
+            <top>30</top>
+            <right>15</right>
+            <bottom>20</bottom>
+        </margins>
+    </page>
 
-<style>
+    <style>
 font{
-    font-family: dejavu;
+    font-family: noto;
     font-point-size: 12;
     font-style: normal;	
 }
-</style>
+    </style>
 
-<header>
-</header>
+    <header></header>
 
-<footer>
-</footer>
+    <footer></footer>
 
-<body>        
-    <font class="font"/>
-    <grid>
-        <rows>
-            <gr>left left top top</gr>
-            <gr>left left right right</gr>
-            <gr>left left right right</gr>
-            <gr>left left btm btm</gr>
-        </rows>
-        <parts>
-            <part area="left">
-                <text>Quarom pabtisse</text>
-            </part>
-            <part area="top">
-                <text>Spanlunkio Spagetahata</text>
-            </part>
-            <part area="right">
-                <text>Kretem vivo maetresse</text>
-            </part>
-            <part area="btm">
-                <text>Quod sic solitudo</text>
-            </part>
-        </parts>
-    </grid>
-</body>
+    <body>        
+        <font class="font" />
+        <grid>
+            <rows>
+                <gr>left left top top</gr>
+                <gr>left left right right</gr>
+                <gr>left left right right</gr>
+                <gr>left left btm btm</gr>
+            </rows>
+            <parts>
+                <part area="left">
+                    <text>Quarom pabtisse</text>
+                </part>
+                <part area="top">
+                    <text>Spanlunkio Spagetahata</text>
+                </part>
+                <part area="right">
+                    <text>Kretem vivo maetresse</text>
+                </part>
+                <part area="btm">
+                    <text>Quod sic solitudo</text>
+                </part>
+            </parts>
+        </grid>
+    </body>
 </document>

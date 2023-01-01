@@ -20,11 +20,11 @@ func main() {
 		// os.Exit(1)
 		//in = "../../examples/measure.xml"
 		//in = "../../examples/blocks.xml"
-		in = "../../examples/doc2.xml"
+		//in = "../../examples/doc2.xml"
 		//in = "../../examples/doc2.xml"
 		//in = "../../examples/hyphen.xml"
 		//in = "../../examples/tablelines.xml"
-		//in = "../../examples/grid.xml"
+		in = "../../examples/grid.xml"
 		//in = "../../examples/table1.xml"
 	} else {
 		in = os.Args[1]

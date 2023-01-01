@@ -1,0 +1,46 @@
+MonoFont = "dejavu-mono"
+
+[[Fonts]]
+Name = "dejavu"
+  [[Fonts.StyleDefinitions]]
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+
+[[Fonts]]
+Name = "dejavu-serif"
+  [[Fonts.StyleDefinitions]]
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
+
+[[Fonts]]
+Name = "dejavu-mono"
+  [[Fonts.StyleDefinitions]]
+  Style    = "regular"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+  [[Fonts.StyleDefinitions]]
+  Style    = "bold+italic"
+  FilePath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
